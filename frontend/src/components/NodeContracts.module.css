@@ -1,0 +1,114 @@
+.connect,
+.title {
+  position: relative;
+  line-height: 140%;
+}
+.connect {
+  font-size: var(--font-size-sm);
+  line-height: 150%;
+  font-family: var(--font-helvetica);
+  color: var(--secondary-primary-white);
+  text-align: center;
+}
+.buttonconnect,
+.frametitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.buttonconnect {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: var(--color-royalblue);
+  border-radius: var(--br-xs);
+  box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
+  justify-content: center;
+}
+.buttonconnect:hover {
+  background-color: var(--color-royalblue-100);
+}
+.frametitle {
+  align-self: stretch;
+  justify-content: space-between;
+  padding: 0 var(--padding-3xs);
+}
+.totalVotePower {
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.b {
+  position: relative;
+  font-size: var(--font-size-lg);
+  line-height: 140%;
+  color: var(--secondary-primary-white);
+}
+.frameinfo,
+.framevotepower {
+  align-self: stretch;
+  display: flex;
+}
+.framevotepower {
+  border-radius: var(--br-xl);
+  background: linear-gradient(126.97deg, #060c29, rgba(4, 12, 48, 0.5));
+  backdrop-filter: blur(120px);
+  overflow: hidden;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--padding-mini);
+  gap: var(--gap-8xs);
+}
+.frameinfo {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-size: var(--font-size-sm);
+  color: var(--gray-gray-400);
+}
+.frameParent,
+.nodecard,
+.nodecardParent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-3xs);
+}
+.nodecard {
+  flex: 1;
+  border-radius: var(--br-xl);
+  background: linear-gradient(
+    126.97deg,
+    rgba(6, 11, 40, 0.74),
+    rgba(14, 21, 58, 0.71)
+  );
+  backdrop-filter: blur(120px);
+  border: 1px solid var(--color-gray-100);
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: var(--padding-3xs) var(--padding-mini);
+}
+.frameParent,
+.nodecardParent {
+  align-self: stretch;
+  flex-direction: row;
+  justify-content: center;
+}
+.frameParent {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  font-size: var(--font-size-base);
+  color: var(--secondary-primary-white);
+  font-family: var(--font-inter);
+}
+@media screen and (max-width: 1200px) {
+  .nodecard {
+    flex: unset;
+    align-self: stretch;
+  }
+  .nodecardParent {
+    flex-direction: column;
+  }
+}

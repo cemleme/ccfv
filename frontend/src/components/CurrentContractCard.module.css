@@ -1,0 +1,149 @@
+.title,
+.totalVotePower {
+  position: relative;
+  line-height: 140%;
+}
+.totalVotePower {
+  line-height: 100%;
+  font-weight: 500;
+}
+.b {
+  position: relative;
+  font-size: var(--font-size-lg);
+  line-height: 140%;
+  color: var(--secondary-primary-white);
+}
+.col1,
+.framevotepower {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.framevotepower {
+  align-self: stretch;
+  border-radius: var(--br-xl);
+  background: linear-gradient(126.97deg, #060c29, rgba(4, 12, 48, 0.5));
+  backdrop-filter: blur(120px);
+  overflow: hidden;
+  padding: var(--padding-xl) var(--padding-mini);
+  gap: var(--gap-8xs);
+}
+.col1 {
+  flex: 1;
+  height: 11.44rem;
+  gap: var(--gap-3xs);
+}
+.addFund {
+  position: relative;
+  font-size: var(--font-size-sm);
+  line-height: 150%;
+  font-family: var(--font-helvetica);
+  color: var(--secondary-primary-white);
+  text-align: center;
+}
+.buttonaddfund,
+.buttoncreateproposal {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: var(--color-olivedrab);
+  align-self: stretch;
+  flex: 0.5;
+  border-radius: var(--br-xs);
+  box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.buttonaddfund:hover {
+  background-color: var(--color-darkolivegreen);
+}
+.buttoncreateproposal {
+  background-color: var(--color-royalblue);
+}
+.buttoncreateproposal:hover {
+  background-color: var(--color-darkslateblue-200);
+}
+.col3,
+.currentcard,
+.frameinfo {
+  align-self: stretch;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.col3 {
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap-3xs);
+}
+.currentcard,
+.frameinfo {
+  flex-direction: row;
+  font-size: var(--font-size-sm);
+  color: var(--gray-gray-400);
+}
+.currentcard {
+  border-radius: var(--br-xl);
+  background: linear-gradient(
+    126.97deg,
+    rgba(6, 11, 40, 0.74),
+    rgba(14, 21, 58, 0.71)
+  );
+  backdrop-filter: blur(120px);
+  border: 1px solid var(--color-gray-100);
+  box-sizing: border-box;
+  height: 17rem;
+  flex-direction: column;
+  padding: var(--padding-8xl) var(--padding-12xl);
+  gap: var(--gap-3xs);
+  text-align: left;
+  font-size: var(--font-size-lg);
+  color: var(--secondary-primary-white);
+  font-family: var(--font-inter);
+}
+.lifeTimeFunds {
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.b,
+.ccipBnm {
+  position: relative;
+  line-height: 140%;
+}
+.ccipBnm {
+  font-size: var(--font-size-sm);
+  line-height: 100%;
+  font-weight: 500;
+  color: var(--gray-gray-400);
+}
+.parent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+  font-size: var(--font-size-lg);
+  color: var(--secondary-primary-white);
+}
+.lifetimefunds {
+  align-self: stretch;
+  flex: 1;
+  border-radius: var(--br-xl);
+  background: linear-gradient(126.97deg, #060c29, rgba(4, 12, 48, 0.5));
+  backdrop-filter: blur(120px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-xl) var(--padding-mini);
+  gap: var(--gap-8xs);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  color: var(--gray-gray-400);
+  font-family: var(--font-inter);
+}

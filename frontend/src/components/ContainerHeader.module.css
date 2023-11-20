@@ -1,0 +1,118 @@
+.g31909Icon {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  max-width: 100%;
+  overflow: hidden;
+  max-height: 100%;
+}
+.logo {
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  position: relative;
+  width: 4.14rem;
+  height: 3.75rem;
+}
+.logoWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--padding-xl);
+}
+.empty {
+  flex: 1;
+}
+.balanceCcipBnm {
+  position: relative;
+  line-height: 100%;
+  font-weight: 500;
+}
+.b {
+  position: relative;
+  font-size: var(--font-size-lg);
+  line-height: 140%;
+  color: var(--secondary-primary-white);
+}
+.text,
+.userbalance {
+  display: flex;
+  align-items: center;
+}
+.text {
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--gap-10xs);
+}
+.logotext {
+  padding-left: 80px;
+  font-size: 32px;
+  color: white;
+  font-family: var(--font-inter);
+}
+.userbalance {
+  border-radius: var(--br-xl);
+  background: linear-gradient(
+    126.97deg,
+    rgba(6, 11, 38, 0.74),
+    rgba(26, 31, 55, 0.5)
+  );
+  backdrop-filter: blur(120px);
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: var(--padding-3xs) var(--padding-11xl);
+}
+.connect1 {
+  align-self: stretch;
+  flex: 1;
+  position: relative;
+  line-height: 150%;
+}
+.buttonconnect {
+  border-radius: var(--br-xs);
+  background-color: var(--color-royalblue);
+  color: white;
+  box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
+  width: 10rem;
+  padding: var(--padding-3xs);
+  box-sizing: border-box;
+}
+.buttonconnect,
+.connect,
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.connect {
+  border-radius: var(--br-xl);
+  background: linear-gradient(
+    126.97deg,
+    rgba(6, 11, 38, 0.74),
+    rgba(26, 31, 55, 0.5)
+  );
+  backdrop-filter: blur(120px);
+  padding: var(--padding-3xs) var(--padding-11xl);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--secondary-primary-white);
+  font-family: var(--font-helvetica);
+}
+.header {
+  align-self: stretch;
+  height: 6.25rem;
+  padding: 0 var(--padding-11xl);
+  box-sizing: border-box;
+  gap: var(--gap-3xs);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  color: var(--gray-gray-400);
+  font-family: var(--font-inter);
+}

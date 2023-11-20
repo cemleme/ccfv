@@ -1,0 +1,73 @@
+.addfund {
+  align-self: stretch;
+  position: relative;
+  line-height: 150%;
+}
+.inputamount {
+  border: 0;
+  background-color: transparent;
+  align-self: stretch;
+}
+.addFund {
+  position: relative;
+  font-size: var(--font-size-sm);
+  line-height: 150%;
+  font-family: var(--font-helvetica);
+  color: var(--secondary-primary-white);
+  text-align: center;
+}
+.buttonaddfund {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: var(--color-olivedrab);
+  align-self: stretch;
+  border-radius: var(--br-8xs);
+  box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
+  height: 40px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.buttonaddfund:hover {
+  background-color: var(--color-darkolivegreen);
+}
+.addfundmodal,
+.buttonaddfund,
+.buttonapprove {
+  display: flex;
+  box-sizing: border-box;
+}
+.buttonapprove {
+  cursor: pointer;
+  border: 0;
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: #e84b4b;
+  align-self: stretch;
+  border-radius: var(--br-8xs);
+  box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
+  height: 40px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.buttonapprove:hover {
+  background-color: #cf3030;
+}
+.addfundmodal {
+  border-radius: var(--br-11xl);
+  background-color: var(--secondary-primary-white);
+  width: 600px;
+  overflow: hidden;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: var(--padding-21xl);
+  gap: var(--gap-3xs);
+  max-width: 100%;
+  max-height: 100%;
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-black);
+  font-family: var(--font-helvetica);
+}
