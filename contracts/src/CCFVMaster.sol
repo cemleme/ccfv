@@ -106,6 +106,17 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
     }
 
     // USER FUNCTIONS
+    function getStats(
+        address user
+    )
+        external
+        view
+        returns (uint256 lifetimeFunds, uint256 currentFunds, uint256 userFunds)
+    {
+        lifetimeFunds = totalFund;
+        currentFunds = remainingFund;
+        userFunds = userVotePower[user];
+    }
 
     function getProposals(
         uint256 offset,
