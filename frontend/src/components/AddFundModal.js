@@ -12,7 +12,6 @@ const AddFundModal = ({ onClose }) => {
   const { address, isConnecting, isDisconnected } = useAccount();
   const [amount, setAmount] = useState(1);
 
-  console.log("chain", chain.id);
   const {
     data: writeData,
     isLoading: writeIsLoading,
@@ -72,9 +71,6 @@ const AddFundModal = ({ onClose }) => {
     args: [address],
     watch: true,
   });
-
-  console.log("balance", balance, balanceError, balanceLoading);
-  console.log("allowance", allowance, allowanceError);
 
   const handleAddFund = () => {
     write({

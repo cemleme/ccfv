@@ -39,7 +39,6 @@ const VotesContainer = ({ id }) => {
 
   //PROPOSAL VOTES FROM THEGRAPH
   useEffect(() => {
-    console.log("id", id);
     if (!id) return;
     const loadData = async () => {
       const allVotes = [];

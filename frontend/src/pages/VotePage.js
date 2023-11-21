@@ -54,8 +54,6 @@ const VotePage = () => {
     chainId: chain.id,
   });
 
-  console.log("currentNetworkStats", currentNetworkStats);
-
   const { data: userVoted } = useContractRead({
     address: config[chain.id].ccfv,
     abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
@@ -78,7 +76,6 @@ const VotePage = () => {
 
   //PROPOSAL TITLE AND DESSCRIPTION DATA FROM THEGRAPH
   useEffect(() => {
-    console.log("id", id);
     if (!id) return;
     const loadData = async () => {
       const graph =

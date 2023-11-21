@@ -65,7 +65,7 @@ const Proposals = () => {
     loadData();
   }, []);
 
-  if (!proposals) return <></>;
+  if (!proposals && !stats) return <></>;
   return (
     <div className={styles.proposals}>
       <b className={styles.proposals1}>Proposals</b>
@@ -82,7 +82,7 @@ const Proposals = () => {
                     )?.title
                   : ""
               }
-              requiredVotePower={stats[sepolia.id].totalVotePower * 0.7}
+              requiredVotePower={stats[sepolia.id]?.totalVotePower * 0.7}
               unsynced={unsyncedIds.includes(parseInt(p.id))}
               cursorRight={stats[chain?.id]?.cursorRight}
             />

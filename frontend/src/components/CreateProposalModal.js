@@ -24,17 +24,7 @@ const CreateProposalModal = ({ onClose }) => {
     functionName: "createProposal",
   });
 
-  console.log("writeData", writeData, writeIsLoading, isSuccess);
-
   const submitCreate = () => {
-    console.log(
-      receiver,
-      parseEther(amount),
-      title,
-      description,
-      data.toString()
-    );
-
     write({
       args: [receiver, parseEther(amount), title, description],
       from: address,

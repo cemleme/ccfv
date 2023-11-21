@@ -29,8 +29,7 @@ const NodeCard = ({ targetChain }) => {
 
   useEffect(() => {
     if (!data) return;
-    console.log(data[6].map((i) => parseInt(i)));
-
+    
     dispatch(
       addFundsToBridge({ id: targetChain.id, value: formatEther(data[2]) })
     );

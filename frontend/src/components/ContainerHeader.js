@@ -41,7 +41,7 @@ const ContainerHeader = () => {
       <div className={styles.userbalance}>
         <div className={styles.text}>
           <div className={styles.balanceCcipBnm}>Balance CCIP-BnM</div>
-          <b className={styles.b}>{balance && formatEther(balance)}</b>
+          <b className={styles.b}>{balance && parseFloat(formatEther(balance)).toFixed(5)}</b>
         </div>
       </div>
       <div className={styles.connect}>
