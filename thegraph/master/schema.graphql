@@ -1,0 +1,61 @@
+type MessageReceived @entity(immutable: true) {
+  id: Bytes!
+  messageId: Bytes! # bytes32
+  sourceChainSelector: BigInt! # uint64
+  sender: Bytes! # address
+  text: String! # string
+  token: Bytes! # address
+  tokenAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferRequested @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ProposalCreated @entity(immutable: true) {
+  id: Bytes!
+  creator: Bytes! # address
+  target: Bytes! # address
+  amount: BigInt! # uint256
+  title: String! # string
+  description: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ProvidedFund @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VotedFor @entity(immutable: true) {
+  id: Bytes!
+  proposalId: BigInt! # uint256
+  user: Bytes! # address
+  votePower: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
