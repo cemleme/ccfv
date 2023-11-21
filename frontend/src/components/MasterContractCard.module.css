@@ -81,6 +81,16 @@
   line-height: 140%;
   color: var(--secondary-primary-white);
 }
+.ccipBnm {
+  position: relative;
+  line-height: 140%;
+}
+.ccipBnm {
+  font-size: var(--font-size-sm);
+  line-height: 100%;
+  font-weight: 500;
+  color: var(--gray-gray-400);
+}
 .data,
 .framevotepower {
   flex: 1;
@@ -155,6 +165,15 @@
   align-items: flex-start;
   padding: var(--padding-8xl) var(--padding-12xl);
   gap: var(--gap-3xs);
+}
+.parent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-xs);
+  font-size: var(--font-size-lg);
+  color: var(--secondary-primary-white);
 }
 .selectednode {
   background: linear-gradient(

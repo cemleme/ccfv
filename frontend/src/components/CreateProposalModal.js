@@ -4,6 +4,7 @@ import { formatEther, parseEther } from "viem";
 import styles from "./CreateProposalModal.module.css";
 import { useState } from "react";
 import config from "../constants/config";
+import masterAbi from "../constants/master.abi";
 
 const CreateProposalModal = ({ onClose }) => {
   const { address } = useAccount();
@@ -19,58 +20,31 @@ const CreateProposalModal = ({ onClose }) => {
     write,
   } = useContractWrite({
     address: config[11155111].ccfv,
-    abi: [
-      {
-        inputs: [
-          {
-            internalType: "address",
-            name: "receiver",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256",
-          },
-        ],
-        name: "createProposal",
-        outputs: [],
-        stateMutability: "payable",
-        type: "function",
-      },
-    ],
+    abi: masterAbi,
     functionName: "createProposal",
   });
 
   console.log("writeData", writeData, writeIsLoading, isSuccess);
 
   const submitCreate = () => {
-    console.log(receiver, parseEther(amount), title, description, data);
+    console.log(
+      receiver,
+      parseEther(amount),
+      title,
+      description,
+      data.toString()
+    );
 
     write({
-      args: [receiver, parseEther(amount)],
+      args: [receiver, parseEther(amount), title, description],
       from: address,
-      value: data,
+      value: data.toString(),
     });
   };
 
   const { data, isError, isLoading } = useContractRead({
     address: config[11155111].ccfv,
-    abi: [
-      {
-        inputs: [],
-        name: "getProposalCost",
-        outputs: [
-          {
-            internalType: "int256",
-            name: "cost",
-            type: "int256",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-    ],
+    abi: masterAbi,
     functionName: "getProposalCost",
   });
 

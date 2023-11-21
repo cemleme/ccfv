@@ -2,25 +2,32 @@ import styles from "./ContainerHeader.module.css";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useBalance } from "wagmi";
+import { erc20ABI, useAccount, useContractRead } from "wagmi";
 import { useNetwork } from "wagmi";
 import config from "../constants/config";
+import { formatEther } from "viem";
 
 const ContainerHeader = () => {
   const navigate = useNavigate();
   const { chain } = useNetwork();
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
-  const balance = useBalance({
-    address,
-    token: config[chain.id].token,
-  });
-
-  console.log(balance);
 
   const onButtonInspectClick = useCallback(() => {
     navigate("/");
   }, [navigate]);
+
+  const {
+    data: balance,
+    isError: balanceError,
+    isLoading: balanceLoading,
+  } = useContractRead({
+    address: config[chain.id].token,
+    abi: erc20ABI,
+    functionName: "balanceOf",
+    args: [address],
+    watch: true,
+  });
 
   return (
     <div className={styles.header}>
@@ -34,9 +41,7 @@ const ContainerHeader = () => {
       <div className={styles.userbalance}>
         <div className={styles.text}>
           <div className={styles.balanceCcipBnm}>Balance CCIP-BnM</div>
-          <b className={styles.b}>
-            {balance.data && parseFloat(balance.data.formatted).toFixed(5)}
-          </b>
+          <b className={styles.b}>{balance && formatEther(balance)}</b>
         </div>
       </div>
       <div className={styles.connect}>

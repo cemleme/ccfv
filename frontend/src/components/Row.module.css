@@ -59,7 +59,6 @@
 .successfailed {
   align-self: stretch;
   border-radius: var(--br-11xl);
-  display: none;
   flex-direction: row;
   align-items: flex-start;
   justify-content: center;

@@ -1,8 +1,65 @@
 import VotesContainer from "../components/VotesContainer";
 import ContainerHeader from "../components/ContainerHeader";
 import styles from "./VotePage.module.css";
+import { useParams } from "react-router-dom";
+import { sepolia, useContractRead, useNetwork, useAccount } from "wagmi";
+import config from "../constants/config";
+import masterAbi from "../constants/master.abi";
+import { formatEther } from "viem";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import nodeAbi from "../constants/node.abi";
 
 const VotePage = () => {
+  const { id } = useParams();
+  const { chain } = useNetwork();
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { data: proposal } = useContractRead({
+    address: config[sepolia.id].ccfv,
+    abi: masterAbi,
+    functionName: "proposals",
+    chainId: sepolia.id,
+    args: [id],
+  });
+  const [needsActivating, setNeedsActivating] = useState(false);
+  const [canVote, setCanVote] = useState(false);
+
+  const {
+    data: currentNetworkStats,
+    isError,
+    isLoading,
+  } = useContractRead({
+    address: config[chain.id].ccfv,
+    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    functionName: "getStats",
+    args: [address],
+    chainId: chain.id,
+  });
+
+  console.log("currentNetworkStats", currentNetworkStats);
+
+  const { data: userVoted } = useContractRead({
+    address: config[chain.id].ccfv,
+    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    functionName: "userVoted",
+    chainId: chain.id,
+    args: [address, proposal.id],
+  });
+
+  useEffect(() => {
+    if (chain.name === "Sepolia") {
+      setNeedsActivating(false);
+      setCanVote(!userVoted);
+    } else {
+      const cursorRight = currentNetworkStats[4];
+      setNeedsActivating(cursorRight <= formatEther(id));
+      setCanVote(cursorRight > formatEther(id) && !userVoted);
+    }
+  }, [userVoted, currentNetworkStats, chain]);
+
+  console.log(proposal);
+  if (!proposal) return <></>;
+
   return (
     <div className={styles.votepage}>
       <ContainerHeader />
@@ -11,7 +68,7 @@ const VotePage = () => {
           <div className={styles.proposalcard}>
             <div className={styles.frametitle}>
               <b className={styles.id}>#</b>
-              <b className={styles.id}>11</b>
+              <b className={styles.id}>{id}</b>
               <b className={styles.id}>:</b>
               <b className={styles.id}>Donation to asdf DFsf</b>
             </div>
@@ -19,20 +76,16 @@ const VotePage = () => {
               <div className={styles.col1}>
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Creator</div>
-                  <b className={styles.address}>
-                    0x0bF8eD3f9357bFea8226C4e5a4D2Bae6dA22637e
-                  </b>
+                  <b className={styles.address}>{proposal[1]}</b>
                 </div>
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Reciever</div>
-                  <b className={styles.address}>
-                    0x0bF8eD3f9357bFea8226C4e5a4D2Bae6dA22637e
-                  </b>
+                  <b className={styles.address}>{proposal[2]}</b>
                 </div>
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Proposed Amount</div>
                   <div className={styles.amount}>
-                    <b className={styles.id}>{`145 `}</b>
+                    <b className={styles.id}>{formatEther(proposal[3])}</b>
                     <div className={styles.ccipBnm}>CCIP-BnM</div>
                   </div>
                 </div>
@@ -44,13 +97,13 @@ const VotePage = () => {
                 </div>
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Votes Received</div>
-                  <b className={styles.b}>5</b>
+                  <b className={styles.b}>{formatEther(proposal[4])}</b>
                 </div>
               </div>
               <div className={styles.col3}>
                 <div className={styles.framevotepower}>
                   <div className={styles.balanceCcipBnm}>Your Vote Power</div>
-                  <b className={styles.b}>5</b>
+                  <b className={styles.b}>{formatEther(currentNetworkStats[1])}</b>
                 </div>
                 <button className={styles.buttonvote}>
                   <b className={styles.vote}>Vote For</b>

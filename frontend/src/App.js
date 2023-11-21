@@ -5,6 +5,8 @@ import {
   useNavigationType,
   useLocation,
 } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
 import { sepolia, avalancheFuji, polygonMumbai, bscTestnet } from "viem/chains";
@@ -87,12 +89,14 @@ function App() {
   }, [pathname]);
 
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <Routes>
-        <Route path="/" element={<MainDashboard />} />
-        <Route path="/vote" element={<VotePage />} />
-      </Routes>
-    </WagmiConfig>
+    <Provider store={store}>
+      <WagmiConfig config={wagmiConfig}>
+        <Routes>
+          <Route path="/" element={<MainDashboard />} />
+          <Route path="/vote/:id" element={<VotePage />} />
+        </Routes>
+      </WagmiConfig>
+    </Provider>
   );
 }
 export default App;

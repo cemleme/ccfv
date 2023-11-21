@@ -58,6 +58,7 @@ const AddFundModal = ({ onClose }) => {
     abi: erc20ABI,
     functionName: "allowance",
     args: [address, config[chain.id].ccfv],
+    watch: true,
   });
 
   const {
@@ -69,6 +70,7 @@ const AddFundModal = ({ onClose }) => {
     abi: erc20ABI,
     functionName: "balanceOf",
     args: [address],
+    watch: true,
   });
 
   console.log("balance", balance, balanceError, balanceLoading);
@@ -88,7 +90,7 @@ const AddFundModal = ({ onClose }) => {
     });
   };
 
-  if (!balance || !allowance) return <>Loading...</>;
+  if (balance == undefined || allowance == undefined) return <>Loading...</>;
 
   return (
     <div className={styles.addfundmodal}>
