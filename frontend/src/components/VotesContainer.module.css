@@ -39,10 +39,18 @@
 }
 .network {
   border-radius: var(--br-11xl);
-  background-color: var(--color-olivedrab);
   flex-direction: row;
   justify-content: center;
   text-align: center;
+}
+.fuji{
+  background-color: #E84142;
+}
+.mumbai{
+  background-color: #562ef4;
+}
+.sepolia{
+  background-color: #14044d;
 }
 .items,
 .list,

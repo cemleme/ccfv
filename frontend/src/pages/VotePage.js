@@ -2,7 +2,13 @@ import VotesContainer from "../components/VotesContainer";
 import ContainerHeader from "../components/ContainerHeader";
 import styles from "./VotePage.module.css";
 import { useParams } from "react-router-dom";
-import { sepolia, useContractRead, useNetwork, useAccount } from "wagmi";
+import {
+  sepolia,
+  useContractRead,
+  useContractWrite,
+  useNetwork,
+  useAccount,
+} from "wagmi";
 import config from "../constants/config";
 import masterAbi from "../constants/master.abi";
 import { formatEther } from "viem";
@@ -25,6 +31,17 @@ const VotePage = () => {
   const [canVote, setCanVote] = useState(false);
   const [proposalData, setProposalData] = useState();
 
+  const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
+    address: config[chain.id].ccfv,
+    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    functionName: "voteForProposal",
+    args: [id],
+  });
+
+  const handleVote = () => {
+    writeVote();
+  };
+
   const {
     data: currentNetworkStats,
     isError,
@@ -45,6 +62,7 @@ const VotePage = () => {
     functionName: "userVoted",
     chainId: chain.id,
     args: [address, id],
+    watch: true,
   });
 
   useEffect(() => {
@@ -58,6 +76,7 @@ const VotePage = () => {
     }
   }, [userVoted, currentNetworkStats, chain]);
 
+  //PROPOSAL TITLE AND DESSCRIPTION DATA FROM THEGRAPH
   useEffect(() => {
     console.log("id", id);
     if (!id) return;
@@ -90,12 +109,10 @@ const VotePage = () => {
       const result = await results.json();
       const _proposal = result.data.proposalCreateds[0];
       setProposalData(_proposal);
-      console.log(_proposal);
     };
     loadData();
   }, [id]);
 
-  console.log(proposal);
   if (!proposal) return <></>;
 
   return (
@@ -150,8 +167,10 @@ const VotePage = () => {
                   </b>
                 </div>
                 {canVote && (
-                  <button className={styles.buttonvote}>
-                    <b className={styles.vote}>Vote For</b>
+                  <button className={styles.buttonvote} onClick={handleVote}>
+                    <b className={styles.vote}>
+                      {isVoteLoading ? "Voting..." : "Vote For"}
+                    </b>
                   </button>
                 )}
                 {needsActivating && (
@@ -168,7 +187,7 @@ const VotePage = () => {
               </p>
             </div>
           </div>
-          <VotesContainer />
+          <VotesContainer id={id} />
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ import config from "../constants/config";
 import { useSelector, useDispatch } from "react-redux";
 import { formatEther } from "viem";
 import { useEffect } from "react";
-import { addFundsToBridge, setStats } from "../reducers/root";
+import { addFundsToBridge, setStats, addUnsyncedId } from "../reducers/root";
 
 const NodeCard = ({ targetChain }) => {
   const { chain } = useNetwork();
@@ -27,9 +27,9 @@ const NodeCard = ({ targetChain }) => {
     watch: true,
   });
 
-
   useEffect(() => {
     if (!data) return;
+    console.log(data[6].map((i) => parseInt(i)));
 
     dispatch(
       addFundsToBridge({ id: targetChain.id, value: formatEther(data[2]) })
@@ -42,9 +42,11 @@ const NodeCard = ({ targetChain }) => {
           userVotePower: formatEther(data[1]),
           fundsToBridge: formatEther(data[2]),
           cursorRight: parseInt(data[4]),
+          proposalsUnsynced: data[6].map((i) => parseInt(i)),
         },
       })
     );
+    dispatch(addUnsyncedId({ ids: data[6].map((i) => parseInt(i)) }));
   }, [data]);
 
   if (!data) return <></>;

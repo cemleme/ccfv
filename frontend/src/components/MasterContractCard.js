@@ -71,10 +71,9 @@ const MasterContractCard = () => {
             <div className={styles.lifeTimeFunds}>Funds to Receive</div>
             <div className={styles.parent}>
               <b className={styles.b}>
-                {Object.values(fundsToBridge).reduce(
-                  (a, b) => parseFloat(a) + parseFloat(b),
-                  0
-                )}
+                {Object.values(fundsToBridge)
+                  .reduce((a, b) => parseFloat(a) + parseFloat(b), 0)
+                  .toFixed(3)}
               </b>
               <div className={styles.ccipBnm}>CCIP-BnM</div>
             </div>

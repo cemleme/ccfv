@@ -82,7 +82,6 @@
 }
 .progressChild {
   border-top: 3px solid var(--color-royalblue);
-  width: 1.34rem;
 }
 .progressItem {
   align-self: stretch;

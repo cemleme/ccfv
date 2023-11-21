@@ -12,7 +12,7 @@ import masterAbi from "../constants/master.abi";
 import nodeAbi from "../constants/node.abi";
 import config from "../constants/config";
 
-const Row = ({ proposal, cursorRight }) => {
+const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const navigate = useNavigate();
   const { chain } = useNetwork();
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -25,7 +25,13 @@ const Row = ({ proposal, cursorRight }) => {
     functionName: "userVoted",
     chainId: chain.id,
     args: [address, proposal.id],
+    watch: true,
   });
+
+  let progress = Math.floor(
+    (100 * parseFloat(formatEther(proposal.votesApproved))) / requiredVotePower
+  );
+  if (progress > 100) progress = 100;
 
   useEffect(() => {
     setNeedsActivating(
@@ -72,11 +78,11 @@ const Row = ({ proposal, cursorRight }) => {
         <div className={styles.rowtop}>
           <div className={styles.rowtop}>
             <b className={styles.label}>#:</b>
-            <b className={styles.proposalTitle}>{formatEther(proposal.id)}</b>
+            <b className={styles.proposalTitle}>{parseInt(proposal.id)}</b>
           </div>
           <div className={styles.rowtop}>
             <b className={styles.label}>Title:</b>
-            <b className={styles.proposalTitle}>Donation to x funds</b>
+            <b className={styles.proposalTitle}>{title}</b>
           </div>
         </div>
         <div className={styles.rowtop}>
@@ -101,10 +107,11 @@ const Row = ({ proposal, cursorRight }) => {
             <b className={styles.active}>Ongoing</b>
           </div>
         )}
-        <div className={styles.statuswaitingvotes}>
-          <b className={styles.active}>Unsynced</b>
-        </div>
-
+        {unsynced && (
+          <div className={styles.statuswaitingvotes}>
+            <b className={styles.active}>CCIP</b>
+          </div>
+        )}
         {proposal.success && (
           <div className={styles.statussuccess}>
             <b className={styles.active}>Success</b>
@@ -122,8 +129,11 @@ const Row = ({ proposal, cursorRight }) => {
             </div>
           )}
         <div className={styles.progress}>
-          <b className={styles.label}>{formatEther(proposal.votesApproved)}%</b>
-          <div className={styles.progressChild} />
+          <b className={styles.label}>{progress}%</b>
+          <div
+            className={styles.progressChild}
+            style={{ width: progress + "%" }}
+          />
           <div className={styles.progressItem} />
         </div>
       </div>
