@@ -41,8 +41,17 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
         address token, // The token address that was transferred.
         uint256 tokenAmount, // The token amount that was transferred.
         address feeToken, // the token address used to pay CCIP fees.
-        uint256 fees // The fees paid for sending the message.
+        uint256 fees, // The fees paid for sending the message.
+        uint256 voteAmount
     );
+
+    event VotedFor(
+        uint256 indexed proposalId,
+        address indexed user,
+        uint256 votePower
+    );
+
+    event ProvidedFund(address indexed user, uint256 amount);
 
     // Mapping to keep track of allowlisted destination chains.
     mapping(uint64 => bool) public allowlistedDestinationChains;
@@ -105,6 +114,8 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
         userVotePower[msg.sender] += amount;
         fundsWaiting += amount;
         totalDonation += amount;
+
+        emit ProvidedFund(msg.sender, amount);
     }
 
     function voteForProposal(uint256 _proposalId) external {
@@ -120,6 +131,8 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
         proposalVotesWaiting[_proposalId] += userVotePower[msg.sender];
         votesWaiting += userVotePower[msg.sender];
         userVoted[msg.sender][_proposalId] = true;
+
+        emit VotedFor(_proposalId, msg.sender, userVotePower[msg.sender]);
     }
 
     function getStats(
@@ -144,7 +157,7 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
         proposalNonce = proposalCursorRight;
         canUpdateProposalNonce =
             block.timestamp >= lastCursorUpdate + cursorUpdateInterval;
-        proposalsWaitingUpdate = proposalsWaitingUpdate;
+        proposalsWaitingUpdate = proposalIdsWithWaitingVotes;
     }
 
     //AUTOMATION FUNCTIONS
@@ -174,6 +187,7 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
             revert Errors.BridgeRecentlyRan();
 
         uint256 _amount = fundsWaiting;
+        uint256 _votesWaiting = votesWaiting;
         fundsWaiting = 0;
         votesWaiting = 0;
 
@@ -216,7 +230,8 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
             address(fundingToken),
             _amount,
             address(s_linkToken),
-            fees
+            fees,
+            _votesWaiting
         );
 
         // Return the message ID

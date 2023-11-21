@@ -31,6 +31,14 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
         string description
     );
 
+    event VotedFor(
+        uint256 indexed proposalId,
+        address indexed user,
+        uint256 votePower
+    );
+
+    event ProvidedFund(address indexed user, uint256 amount);
+
     bytes32 private s_lastReceivedMessageId; // Store the last received messageId.
     address private s_lastReceivedTokenAddress; // Store the last received token address.
     uint256 private s_lastReceivedTokenAmount; // Store the last received amount.
@@ -123,7 +131,7 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
         uint256 size
     ) external view returns (Proposal[] memory) {
         uint length = (proposalCursorRight < size || size == 0)
-            ? proposalCursorRight - 1
+            ? proposalCursorRight
             : size;
         Proposal[] memory multiProposal = new Proposal[](length);
 
@@ -174,6 +182,8 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
         userVotePower[msg.sender] += amount;
         totalFund += amount;
         remainingFund += amount;
+
+        emit ProvidedFund(msg.sender, amount);
     }
 
     //update left cursor to a proposal that is closed + 1;
@@ -237,6 +247,8 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
 
         proposals[_proposalId].votesApproved += userVotePower[msg.sender];
         userVoted[msg.sender][_proposalId] = true;
+
+        emit VotedFor(_proposalId, msg.sender, userVotePower[msg.sender]);
     }
 
     function queueProposal(uint256 _proposalId) external {
