@@ -1,0 +1,78 @@
+type MessageSent @entity(immutable: true) {
+  id: Bytes!
+  messageId: Bytes! # bytes32
+  destinationChainSelector: BigInt! # uint64
+  receiver: Bytes! # address
+  token: Bytes! # address
+  tokenAmount: BigInt! # uint256
+  feeToken: Bytes! # address
+  fees: BigInt! # uint256
+  voteAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferRequested @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type OwnershipTransferred @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ProvidedFund @entity(immutable: true) {
+  id: Bytes!
+  user: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RequestFulfilled @entity(immutable: true) {
+  id: Bytes!
+  CCFVNode_id: Bytes! # bytes32
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type RequestSent @entity(immutable: true) {
+  id: Bytes!
+  CCFVNode_id: Bytes! # bytes32
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Response @entity(immutable: true) {
+  id: Bytes!
+  requestId: Bytes! # bytes32
+  character: String! # string
+  response: Bytes! # bytes
+  err: Bytes! # bytes
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type VotedFor @entity(immutable: true) {
+  id: Bytes!
+  proposalId: BigInt! # uint256
+  user: Bytes! # address
+  votePower: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

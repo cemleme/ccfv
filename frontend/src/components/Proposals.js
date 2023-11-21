@@ -27,7 +27,8 @@ const Proposals = () => {
     abi: masterAbi,
     functionName: "getProposals",
     chainId: sepolia.id,
-    args: [0, cursorRight],
+    args: [0, 20],
+    watch: true
   });
 
   console.log(proposals);

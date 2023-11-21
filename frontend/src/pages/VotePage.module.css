@@ -102,6 +102,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: var(--padding-xl) var(--padding-mini);
+  margin-right: 30px;
   gap: var(--gap-8xs);
 }
 .ccipBnm {
