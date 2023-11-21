@@ -24,6 +24,7 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
     );
 
     event ProposalCreated(
+        uint256 proposalId,
         address creator,
         address target,
         uint256 amount,
@@ -126,6 +127,13 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
         userFunds = userVotePower[user];
     }
 
+    function getProposal(
+        uint256 _proposalId
+    ) external view returns (Proposal memory proposal, uint256 requiredVote) {
+        proposal = proposals[_proposalId];
+        requiredVote = (totalFund * requiredProposalPercentage) / 100;
+    }
+
     function getProposals(
         uint256 offset,
         uint256 size
@@ -174,7 +182,14 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
 
         proposalCursorRight++;
 
-        emit ProposalCreated(msg.sender, receiver, amount, title, description);
+        emit ProposalCreated(
+            proposal.id,
+            msg.sender,
+            receiver,
+            amount,
+            title,
+            description
+        );
     }
 
     function provideFund(uint256 amount) external {

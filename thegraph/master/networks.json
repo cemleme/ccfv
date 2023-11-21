@@ -1,8 +1,8 @@
 {
   "sepolia": {
     "CCFVMaster": {
-      "address": "0xdf60767905e385351d6FBfe66F1b86d1c2ee1F1e",
-      "startBlock": 4731192
+      "address": "0x6f4322e5b90B2A62f53Bbfb4AE346292EB8e7F1D",
+      "startBlock": 4737331
     }
   }
 }

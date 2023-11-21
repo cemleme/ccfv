@@ -93,6 +93,7 @@ export function createOwnershipTransferredEvent(
 }
 
 export function createProposalCreatedEvent(
+  proposalId: BigInt,
   creator: Address,
   target: Address,
   amount: BigInt,
@@ -103,6 +104,12 @@ export function createProposalCreatedEvent(
 
   proposalCreatedEvent.parameters = new Array()
 
+  proposalCreatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "proposalId",
+      ethereum.Value.fromUnsignedBigInt(proposalId)
+    )
+  )
   proposalCreatedEvent.parameters.push(
     new ethereum.EventParam("creator", ethereum.Value.fromAddress(creator))
   )

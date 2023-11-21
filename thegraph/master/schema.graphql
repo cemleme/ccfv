@@ -31,6 +31,7 @@ type OwnershipTransferred @entity(immutable: true) {
 
 type ProposalCreated @entity(immutable: true) {
   id: Bytes!
+  proposalId: BigInt! # uint256
   creator: Bytes! # address
   target: Bytes! # address
   amount: BigInt! # uint256

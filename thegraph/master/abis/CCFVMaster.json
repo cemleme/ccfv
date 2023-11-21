@@ -137,6 +137,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "proposalId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "creator",
         "type": "address"
@@ -357,6 +363,45 @@
     "outputs": [
       { "internalType": "bool", "name": "update", "type": "bool" },
       { "internalType": "uint256", "name": "cursor", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_proposalId", "type": "uint256" }
+    ],
+    "name": "getProposal",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "id", "type": "uint256" },
+          { "internalType": "address", "name": "creator", "type": "address" },
+          { "internalType": "address", "name": "target", "type": "address" },
+          { "internalType": "uint256", "name": "amount", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "votesApproved",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint32",
+            "name": "startTimestamp",
+            "type": "uint32"
+          },
+          {
+            "internalType": "uint32",
+            "name": "closeTimestamp",
+            "type": "uint32"
+          },
+          { "internalType": "bool", "name": "success", "type": "bool" },
+          { "internalType": "bool", "name": "onQueue", "type": "bool" }
+        ],
+        "internalType": "struct CCFVMaster.Proposal",
+        "name": "proposal",
+        "type": "tuple"
+      },
+      { "internalType": "uint256", "name": "requiredVote", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"

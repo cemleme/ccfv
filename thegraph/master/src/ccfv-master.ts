@@ -69,6 +69,7 @@ export function handleProposalCreated(event: ProposalCreatedEvent): void {
   let entity = new ProposalCreated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
+  entity.proposalId = event.params.proposalId
   entity.creator = event.params.creator
   entity.target = event.params.target
   entity.amount = event.params.amount

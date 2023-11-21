@@ -6,9 +6,9 @@ dataSources:
     name: CCFVMaster
     network: sepolia
     source:
-      address: "0xdf60767905e385351d6FBfe66F1b86d1c2ee1F1e"
+      address: "0x6f4322e5b90B2A62f53Bbfb4AE346292EB8e7F1D"
       abi: CCFVMaster
-      startBlock: 4731192
+      startBlock: 4737331
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -30,7 +30,7 @@ dataSources:
           handler: handleOwnershipTransferRequested
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        - event: ProposalCreated(address,address,uint256,string,string)
+        - event: ProposalCreated(uint256,address,address,uint256,string,string)
           handler: handleProposalCreated
         - event: ProvidedFund(indexed address,uint256)
           handler: handleProvidedFund
