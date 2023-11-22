@@ -120,7 +120,9 @@
   text-align: center;
 }
 .buttonactivate,
-.buttonvote {
+.buttonvote,
+.buttonqueue,
+.buttonprocess {
   cursor: pointer;
   border: 0;
   box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
@@ -133,6 +135,24 @@
   background-color: var(--color-royalblue);
   align-self: stretch;
   display: flex;
+}
+.buttonqueue {
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: var(--color-gold);
+  align-self: stretch;
+  display: flex;
+}
+.buttonqueue:hover {
+  background-color: #a9ac1e;
+}
+.buttonprocess {
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: #c36f0c;
+  align-self: stretch;
+  display: flex;
+}
+.buttonprocess:hover {
+  background-color: #98560a;
 }
 .buttonvote:hover {
   background-color: var(--color-royalblue-100);

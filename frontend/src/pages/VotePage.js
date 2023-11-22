@@ -32,7 +32,7 @@ const VotePage = () => {
   const [proposalData, setProposalData] = useState();
 
   const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
-    address: config[chain.id].ccfv,
+    address: config[chain.id]?.ccfv,
     abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "voteForProposal",
     args: [id],
@@ -42,12 +42,20 @@ const VotePage = () => {
     writeVote();
   };
 
+  const { data: masterStats } = useContractRead({
+    address: config[sepolia.id]?.ccfv,
+    abi: masterAbi,
+    functionName: "getStats",
+    args: [address],
+    chainId: sepolia.id,
+  });
+
   const {
     data: currentNetworkStats,
     isError,
     isLoading,
   } = useContractRead({
-    address: config[chain.id].ccfv,
+    address: config[chain.id]?.ccfv,
     abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "getStats",
     args: [address],
@@ -55,7 +63,7 @@ const VotePage = () => {
   });
 
   const { data: userVoted } = useContractRead({
-    address: config[chain.id].ccfv,
+    address: config[chain.id]?.ccfv,
     abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "userVoted",
     chainId: chain.id,
@@ -149,7 +157,9 @@ const VotePage = () => {
               <div className={styles.col2}>
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Required Vote</div>
-                  <b className={styles.b}>1,465</b>
+                  <b className={styles.b}>
+                    {parseFloat(formatEther(masterStats[0])) * 0.7}
+                  </b>
                 </div>
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Votes Received</div>
@@ -163,6 +173,11 @@ const VotePage = () => {
                     {formatEther(currentNetworkStats[1])}
                   </b>
                 </div>
+                {userVoted && (
+                  <div className={styles.voted}>
+                    <b className={styles.vote}>Voted</b>
+                  </div>
+                )}
                 {canVote && (
                   <button className={styles.buttonvote} onClick={handleVote}>
                     <b className={styles.vote}>

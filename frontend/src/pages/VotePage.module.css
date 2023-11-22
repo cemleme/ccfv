@@ -170,6 +170,19 @@
   justify-content: center;
   box-sizing: border-box;
 }
+.voted {
+  border: 0;
+  padding: var(--padding-10xs) var(--padding-3xs);
+  background-color: var(--color-gray-100);
+  align-self: stretch;
+  box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
+  height: 3.75rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
 .buttonvote:hover {
   background-color: var(--color-royalblue-100);
 }

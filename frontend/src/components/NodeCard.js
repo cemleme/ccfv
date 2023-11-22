@@ -18,7 +18,7 @@ const NodeCard = ({ targetChain }) => {
   const { switchNetwork } = useSwitchNetwork();
   const dispatch = useDispatch();
 
-  const { data, isError, isLoading } = useContractRead({
+  const { data, isError, isLoading, error } = useContractRead({
     address: config[targetChain.id].ccfv,
     abi: nodeAbi,
     functionName: "getStats",
@@ -28,8 +28,8 @@ const NodeCard = ({ targetChain }) => {
   });
 
   useEffect(() => {
-    if (!data) return;
-    
+    if (!data) return <></>;
+
     dispatch(
       addFundsToBridge({ id: targetChain.id, value: formatEther(data[2]) })
     );
@@ -61,7 +61,9 @@ const NodeCard = ({ targetChain }) => {
       <div className={styles.frametitle}>
         <b className={styles.title}>
           Node: <br />
-          {targetChain.name}
+          {targetChain.name.length < 20
+            ? targetChain.name
+            : targetChain.name.substring(0, 20)}
         </b>
         {chain && chain?.id !== targetChain.id && (
           <button

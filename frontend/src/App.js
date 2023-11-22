@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import { WagmiConfig, configureChains, createConfig } from "wagmi";
 import { createWeb3Modal, defaultWagmiConfig } from "@web3modal/wagmi/react";
-import { sepolia, avalancheFuji, polygonMumbai, bscTestnet } from "viem/chains";
+import { sepolia, avalancheFuji, polygonMumbai, bscTestnet, baseGoerli, optimismGoerli } from "viem/chains";
 import { walletConnectProvider, EIP6963Connector } from "@web3modal/wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
@@ -19,7 +19,7 @@ import MainDashboard from "./pages/MainDashboard";
 import VotePage from "./pages/VotePage";
 
 const projectId = "dc25d2849a28047aaf861d949abe72c5";
-const _chains = [sepolia, avalancheFuji, polygonMumbai, bscTestnet];
+const _chains = [sepolia, avalancheFuji, polygonMumbai, bscTestnet, baseGoerli, optimismGoerli];
 const { chains, publicClient } = configureChains(_chains, [publicProvider()]);
 
 // 2. Create wagmiConfig

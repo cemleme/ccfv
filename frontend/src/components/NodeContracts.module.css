@@ -88,6 +88,10 @@
   justify-content: flex-start;
   padding: var(--padding-3xs) var(--padding-mini);
 }
+.emptycard {
+  flex: 1;
+  padding: var(--padding-3xs) var(--padding-mini);
+}
 .frameParent,
 .nodecardParent {
   align-self: stretch;
