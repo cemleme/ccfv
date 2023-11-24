@@ -29,6 +29,7 @@ const VotePage = () => {
   });
   const [needsActivating, setNeedsActivating] = useState(false);
   const [canVote, setCanVote] = useState(false);
+  const [canProcess, setCanProcess] = useState(false);
   const [proposalData, setProposalData] = useState();
 
   const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
@@ -42,11 +43,29 @@ const VotePage = () => {
     writeVote();
   };
 
+  const { write: writeProcess } = useContractWrite({
+    address: config[sepolia.id]?.ccfv,
+    abi: masterAbi,
+    functionName: "processQueuedProposal",
+    args: [id],
+  });
+
+  const handleProcess = () => {
+    writeProcess();
+  };
+
   const { data: masterStats } = useContractRead({
     address: config[sepolia.id]?.ccfv,
     abi: masterAbi,
     functionName: "getStats",
     args: [address],
+    chainId: sepolia.id,
+  });
+
+  const { data: queuePeriod } = useContractRead({
+    address: config[sepolia.id]?.ccfv,
+    abi: masterAbi,
+    functionName: "queuePeriod",
     chainId: sepolia.id,
   });
 
@@ -74,13 +93,22 @@ const VotePage = () => {
   useEffect(() => {
     if (chain.name === "Sepolia") {
       setNeedsActivating(false);
-      setCanVote(!userVoted);
+      setCanVote(!userVoted && formatEther(currentNetworkStats[1]) > 0);
+      if (proposal)
+        setCanProcess(
+          proposal[8] && Date.now() / 1000 > proposal[6] + parseInt(queuePeriod)
+        );
     } else {
+      if (!currentNetworkStats) return;
       const cursorRight = currentNetworkStats[4];
       setNeedsActivating(cursorRight <= formatEther(id));
-      setCanVote(cursorRight > formatEther(id) && !userVoted);
+      setCanVote(
+        cursorRight > formatEther(id) &&
+          !userVoted &&
+          formatEther(currentNetworkStats[1]) > 0
+      );
     }
-  }, [userVoted, currentNetworkStats, chain]);
+  }, [userVoted, currentNetworkStats, chain, proposal]);
 
   //PROPOSAL TITLE AND DESSCRIPTION DATA FROM THEGRAPH
   useEffect(() => {
@@ -118,7 +146,7 @@ const VotePage = () => {
     loadData();
   }, [id]);
 
-  if (!proposal) return <></>;
+  if (!proposal || !currentNetworkStats) return <></>;
 
   return (
     <div className={styles.votepage}>
@@ -155,24 +183,30 @@ const VotePage = () => {
                 </div>
               </div>
               <div className={styles.col2}>
-                <div className={styles.framecreator}>
-                  <div className={styles.balanceCcipBnm}>Required Vote</div>
-                  <b className={styles.b}>
-                    {parseFloat(formatEther(masterStats[0])) * 0.7}
-                  </b>
-                </div>
+                {!proposal[7] && (
+                  <div className={styles.framecreator}>
+                    <div className={styles.balanceCcipBnm}>Required Vote</div>
+                    <b className={styles.b}>
+                      {parseFloat(formatEther(masterStats[0])) * 0.7}
+                    </b>
+                  </div>
+                )}
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Votes Received</div>
                   <b className={styles.b}>{formatEther(proposal[4])}</b>
                 </div>
               </div>
               <div className={styles.col3}>
-                <div className={styles.framevotepower}>
-                  <div className={styles.balanceCcipBnm}>Your Vote Power</div>
-                  <b className={styles.b}>
-                    {formatEther(currentNetworkStats[1])}
-                  </b>
-                </div>
+                {!userVoted && (
+                  <div className={styles.framevotepower}>
+                    <div className={styles.balanceCcipBnm}>Your Vote Power</div>
+                    <b className={styles.b}>
+                      {currentNetworkStats
+                        ? formatEther(currentNetworkStats[1])
+                        : ""}
+                    </b>
+                  </div>
+                )}
                 {userVoted && (
                   <div className={styles.voted}>
                     <b className={styles.vote}>Voted</b>
@@ -188,6 +222,14 @@ const VotePage = () => {
                 {needsActivating && (
                   <button className={styles.buttonactivate}>
                     <b className={styles.vote}>Activate</b>
+                  </button>
+                )}{" "}
+                {canProcess && (
+                  <button
+                    className={styles.buttonactivate}
+                    onClick={handleProcess}
+                  >
+                    <b className={styles.vote}>Process Payment</b>
                   </button>
                 )}
               </div>

@@ -12,6 +12,7 @@ import masterAbi from "../constants/master.abi";
 import nodeAbi from "../constants/node.abi";
 import config from "../constants/config";
 import { sepolia } from "viem/chains";
+import { useSelector } from "react-redux";
 
 const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const navigate = useNavigate();
@@ -19,6 +20,8 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const { address, isConnecting, isDisconnected } = useAccount();
   const [needsActivating, setNeedsActivating] = useState(false);
   const [canVote, setCanVote] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const stats = useSelector((state) => state.root.stats);
 
   const { data: userVoted } = useContractRead({
     address: config[chain.id]?.ccfv,
@@ -39,10 +42,18 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
       chain.name !== "Sepolia" && cursorRight <= parseInt(proposal.id)
     );
     setCanVote(
-      (chain.name === "Sepolia" || cursorRight > parseInt(proposal.id)) &&
-        !userVoted
+      stats[chain.id]?.userVotePower > 0 &&
+        (chain.name === "Sepolia" || cursorRight > parseInt(proposal.id)) &&
+        !userVoted &&
+        Date.now() / 1000 < proposal.closeTimestamp
     );
-  }, [userVoted, cursorRight, chain]);
+    setFailed(
+      !proposal.success &&
+        !proposal.onQueue &&
+        progress < 100 &&
+        Date.now() / 1000 > proposal.closeTimestamp
+    );
+  }, [userVoted, cursorRight, chain, progress, proposal]);
 
   const onButtonInspectClick = useCallback(() => {
     navigate("/vote/" + proposal.id);
@@ -144,19 +155,16 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
             <b className={styles.active}>Queued</b>
           </div>
         )}
-        {!proposal.success &&
-          !proposal.onQueue &&
-          progress < 100 &&
-          Date.now() / 1000 > proposal.closeTimestamp && (
-            <div className={styles.successfailed}>
-              <b className={styles.active}>Failed</b>
-            </div>
-          )}
+        {failed && (
+          <div className={styles.successfailed}>
+            <b className={styles.active}>Failed</b>
+          </div>
+        )}
         <div className={styles.progress}>
-          <b className={styles.label}>{progress}%</b>
+          <b className={styles.label}>{proposal.success ? "100" : progress}%</b>
           <div
             className={styles.progressChild}
-            style={{ width: progress + "%" }}
+            style={{ width: (proposal.success ? "100" : progress) + "%" }}
           />
           <div className={styles.progressItem} />
         </div>

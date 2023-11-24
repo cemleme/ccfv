@@ -1,5 +1,6 @@
 import { TextField, InputAdornment, Icon, IconButton } from "@mui/material";
 import { useContractRead, useContractWrite, useAccount } from "wagmi";
+import { waitForTransaction } from "@wagmi/core";
 import { formatEther, parseEther } from "viem";
 import styles from "./CreateProposalModal.module.css";
 import { useState } from "react";
@@ -22,6 +23,9 @@ const CreateProposalModal = ({ onClose }) => {
     address: config[11155111].ccfv,
     abi: masterAbi,
     functionName: "createProposal",
+    onSuccess(data) {
+      onCreateSuccess(data);
+    },
   });
 
   const submitCreate = () => {
@@ -30,6 +34,11 @@ const CreateProposalModal = ({ onClose }) => {
       from: address,
       value: data.toString(),
     });
+  };
+
+  const onCreateSuccess = async (data) => {
+    const receipt = await waitForTransaction({ hash: data.hash });
+    onClose();
   };
 
   const { data, isError, isLoading } = useContractRead({
@@ -93,15 +102,22 @@ const CreateProposalModal = ({ onClose }) => {
         onChange={(e) => setDescription(e.target.value)}
       />
       Cost: {parseFloat(formatEther(data)).toFixed(7)} ETH (0.01 LINK)
-      <button
-        className={styles.buttoncreate}
-        onClick={submitCreate}
-        disabled={isSuccess || writeIsLoading}
-      >
-        <b className={styles.create}>
-          {isSuccess ? "Proposal Created" : "Create"}
-        </b>
-      </button>
+      {writeIsLoading && (
+        <div className={styles.buttoncreate}>
+          <b className={styles.create}>Creating Proposal...</b>
+        </div>
+      )}
+      {!writeIsLoading && (
+        <button
+          className={styles.buttoncreate}
+          onClick={submitCreate}
+          disabled={isSuccess}
+        >
+          <b className={styles.create}>
+            {isSuccess ? "Proposal Created" : "Create"}
+          </b>
+        </button>
+      )}
     </div>
   );
 };

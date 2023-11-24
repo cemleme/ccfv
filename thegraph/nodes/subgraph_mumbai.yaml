@@ -6,7 +6,7 @@ dataSources:
     name: CCFVNode
     network: mumbai
     source:
-      address: "0x91C87761B592145EFDC33aB73F5f15B2e2E7e9D0"
+      address: "0x84135a57dD315681b16aaD7D21205629AeB0D8A6"
       abi: CCFVNode
       startBlock: 42664800
     mapping:

@@ -10,7 +10,7 @@ contract MyScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        address _masterAddress = 0x6f4322e5b90B2A62f53Bbfb4AE346292EB8e7F1D;
+        address _masterAddress = 0x21D06F85824b59E357c4fda5e2B9b8D014152A4B;
 
         address _router = 0xA8C0c11bf64AF62CDCA6f93D3769B88BdD7cb93D;
         address _link = 0xD886E2286Fd1073df82462ea1822119600Af80b6;

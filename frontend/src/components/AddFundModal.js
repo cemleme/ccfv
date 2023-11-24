@@ -1,7 +1,12 @@
 import { TextField, InputAdornment, Icon, IconButton } from "@mui/material";
 import styles from "./AddFundModal.module.css";
-import { useContractRead, useContractWrite, useAccount } from "wagmi";
-import { useNetwork } from "wagmi";
+import {
+  useContractRead,
+  useContractWrite,
+  useAccount,
+  useNetwork,
+} from "wagmi";
+import { waitForTransaction } from "@wagmi/core";
 import { useState } from "react";
 import { formatEther, parseEther } from "viem";
 import { erc20ABI } from "wagmi";
@@ -35,7 +40,15 @@ const AddFundModal = ({ onClose }) => {
       },
     ],
     functionName: "provideFund",
+    onSuccess(data) {
+      onProvideFundSuccess(data);
+    },
   });
+
+  const onProvideFundSuccess = async (data) => {
+    const receipt = await waitForTransaction({ hash: data.hash });
+    onClose();
+  };
 
   const {
     data: writeApproveData,
@@ -72,7 +85,7 @@ const AddFundModal = ({ onClose }) => {
     watch: true,
   });
 
-  const handleAddFund = () => {
+  const handleAddFund = async () => {
     write({
       args: [parseEther(amount.toString())],
       from: address,

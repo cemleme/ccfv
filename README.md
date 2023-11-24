@@ -2,19 +2,6 @@
 
 Try at https://ccfv.netlify.app
 
-## Instructions
-
-(The contracts uses chainlink functions starter kit https://github.com/smartcontractkit/hardhat-starter-kit as a base. Please follow steps there to start)
-
-- Contract Deployment: npx hardhat functions-deploy-client --network [networkName]
-- Functions Subscription: npx hardhat functions-sub-create --network [networkName] --amount --contract
-- Update Subscription on contract: npx hardhat run --network [networkName] scripts/updateSubscription.js
-
-Frontend:
-
-- Update contractAddress @ frontend/constants.js
-- Start using npm run dev (inside frontend folder)
-
 **CCFV** (CrossChain Funding and Voting) is a cutting-edge platform that revolutionizes how funding and decision-making cross over multiple blockchain ecosystems.
 At its core, CCFV enables project creators to launch funding campaigns on a primary blockchain while seamlessly integrating with various other blockchains.
 The platform empowers users from different networks to participate in funding and governance, making the process truly decentralized and inclusive.
@@ -98,6 +85,20 @@ Demo: https://ccfv.netlify.app
 Github (Contracts, Frontend, TheGraph):
 https://github.com/cemleme/ccfv
 
+
+Block Explorers:
+
+https://sepolia.etherscan.io/address/0x21d06f85824b59e357c4fda5e2b9b8d014152a4b
+https://testnet.snowtrace.io/address/0xade11a9802ab4013ea5f56cb6064d9d612eec927
+https://mumbai.polygonscan.com/address/0x84135a57dD315681b16aaD7D21205629AeB0D8A6
+https://testnet.bscscan.com/address/0xed1b65fa69845618ab8649d2b651cbc638daacb2
+https://goerli-optimism.etherscan.io/address/0xed1B65Fa69845618aB8649d2B651cBC638dAACb2
+https://goerli.basescan.org/address/0xABa4b5bf3cb3c3a13782011A3e8a9c961aF590F9
+
+TheGraph Subgraphs:
+
 https://api.thegraph.com/subgraphs/name/cemleme/ccfvsepolia
 https://api.thegraph.com/subgraphs/name/cemleme/ccfvfuji
 https://api.thegraph.com/subgraphs/name/cemleme/ccfvmumbai
+https://api.thegraph.com/subgraphs/name/cemleme/ccfvbsc
+https://api.thegraph.com/subgraphs/name/cemleme/ccfvoptimism

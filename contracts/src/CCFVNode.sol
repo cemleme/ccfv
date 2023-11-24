@@ -177,6 +177,55 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
 
     //CCIP FUNCTIONS TO PACK AND BRIDGE
 
+    function bridgeByPay() public returns (bytes32 messageId) {
+        uint256 _amount = fundsWaiting;
+        uint256 _votesWaiting = votesWaiting;
+        fundsWaiting = 0;
+        votesWaiting = 0;
+
+        Client.EVM2AnyMessage memory evm2AnyMessage = _buildCCIPMessage(
+            _amount
+        );
+
+        // Get the fee to send the CCIP message
+        // receive the LINK from the user
+        uint256 fees = router.getFee(destinationChain, evm2AnyMessage);
+        s_linkToken.transferFrom(msg.sender, address(this), fees);
+
+        // approve the Router to transfer LINK tokens on contract's behalf. It will spend the fees in LINK
+        s_linkToken.approve(address(router), fees);
+
+        // approve the Router to spend tokens on contract's behalf. It will spend the amount of the given token
+        fundingToken.approve(address(router), _amount);
+
+        // Send the message through the router and store the returned message ID
+        messageId = router.ccipSend(destinationChain, evm2AnyMessage);
+
+        //Reset waiting vote data
+        for (uint i = 0; i < proposalIdsWithWaitingVotes.length; i++) {
+            uint256 _propId = proposalIdsWithWaitingVotes[i];
+            delete proposalVotesWaiting[_propId];
+        }
+        delete proposalIdsWithWaitingVotes;
+
+        lastBridge = block.timestamp;
+
+        // Emit an event with message details
+        emit MessageSent(
+            messageId,
+            destinationChain,
+            masterAddress,
+            address(fundingToken),
+            _amount,
+            address(s_linkToken),
+            fees,
+            _votesWaiting
+        );
+
+        // Return the message ID
+        return messageId;
+    }
+
     function bridgeFundsAndVotes() public returns (bytes32 messageId) {
         if (
             proposalIdsWithWaitingVotes.length == 0 &&
@@ -221,6 +270,8 @@ contract CCFVNode is OwnerIsCreator, FunctionsClient, AutomationCompatible {
             delete proposalVotesWaiting[_propId];
         }
         delete proposalIdsWithWaitingVotes;
+
+        lastBridge = block.timestamp;
 
         // Emit an event with message details
         emit MessageSent(

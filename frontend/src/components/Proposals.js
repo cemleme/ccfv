@@ -65,13 +65,15 @@ const Proposals = () => {
     loadData();
   }, []);
 
-  if (!proposals && !stats) return <></>;
+  console.log(proposals)
+
+  if (!proposals || !stats) return <></>;
   return (
     <div className={styles.proposals}>
       <b className={styles.proposals1}>Proposals</b>
       <div className={styles.list}>
         <div className={styles.list}>
-          {proposals.map((p) => (
+          {proposals && proposals.map((p) => (
             <Row
               key={p.id}
               proposal={p}

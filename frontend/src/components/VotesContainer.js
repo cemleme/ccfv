@@ -41,13 +41,16 @@ const VotesContainer = ({ id }) => {
   useEffect(() => {
     if (!id) return;
     const loadData = async () => {
-      const allVotes = [];
+      let allVotes = [];
       const allVotesData = await Promise.all([
         loadGraphData("sepolia"),
         loadGraphData("fuji"),
         loadGraphData("mumbai"),
       ]);
       allVotesData.forEach((v) => allVotes.push(...v));
+      allVotes = allVotes.sort(
+        (a, b) => parseInt(b.blockTimestamp) - parseInt(a.blockTimestamp)
+      );
       setVotes(allVotes);
     };
     loadData();

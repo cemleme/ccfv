@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: CCFVNode
-    network: fuji
+    network: base-testnet
     source:
-      address: "0xaDE11A9802AB4013EA5f56cb6064d9D612EEc927"
+      address: "0xABa4b5bf3cb3c3a13782011A3e8a9c961aF590F9"
       abi: CCFVNode
-      startBlock: 27974070
+      startBlock: 12817374
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

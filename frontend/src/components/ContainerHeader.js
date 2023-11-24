@@ -17,6 +17,10 @@ const ContainerHeader = () => {
     navigate("/");
   }, [navigate]);
 
+  const onButtonAllFunds = useCallback(() => {
+    navigate("/funds");
+  }, [navigate]);
+
   const {
     data: balance,
     isError: balanceError,
@@ -38,10 +42,15 @@ const ContainerHeader = () => {
         </button>
       </div>
       <div className={styles.empty} />
+      <button className={styles.buttonconnect} onClick={onButtonAllFunds}>
+        All Funds
+      </button>
       <div className={styles.userbalance}>
         <div className={styles.text}>
           <div className={styles.balanceCcipBnm}>Balance CCIP-BnM</div>
-          <b className={styles.b}>{balance && parseFloat(formatEther(balance)).toFixed(5)}</b>
+          <b className={styles.b}>
+            {balance && parseFloat(formatEther(balance)).toFixed(5)}
+          </b>
         </div>
       </div>
       <div className={styles.connect}>
