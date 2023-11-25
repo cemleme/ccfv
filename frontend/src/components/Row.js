@@ -71,7 +71,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   }, [userVoted, cursorRight, chain, progress, proposal]);
 
   const onButtonInspectClick = useCallback(() => {
-    navigate("/vote/" + proposal.id);
+    navigate("/proposals/" + proposal.id);
   }, [navigate]);
 
   const {

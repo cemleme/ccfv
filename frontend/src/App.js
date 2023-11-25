@@ -70,7 +70,7 @@ function App() {
         title = "";
         metaDescription = "";
         break;
-      case "/vote":
+      case "/proposal":
         title = "";
         metaDescription = "";
         break;
@@ -97,7 +97,7 @@ function App() {
           <Route path="/" element={<MainDashboard />} />
           <Route path="/funds" element={<AllFunds />} />
           <Route path="/ccip" element={<CCIP />} />
-          <Route path="/vote/:id" element={<VotePage />} />
+          <Route path="/proposals/:id" element={<VotePage />} />
         </Routes>
       </WagmiConfig>
     </Provider>

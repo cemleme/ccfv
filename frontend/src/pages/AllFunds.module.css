@@ -52,6 +52,13 @@
 .sepolia{
   background-color: #14044d;
 }
+.optimism{
+  background-color: #14044d;
+}
+.bsc{
+  background-color: yellow;
+  color: black;
+}
 .items,
 .list,
 .voterrow,
