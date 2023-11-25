@@ -16,6 +16,21 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import nodeAbi from "../constants/node.abi";
 
+function toHoursAndMinutes(totalSeconds) {
+  const totalMinutes = Math.floor(totalSeconds / 60);
+
+  const seconds = Math.floor(totalSeconds % 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  let output = "";
+  if (hours > 0) output += hours + " h ";
+  if (minutes > 0) output += minutes + " m ";
+  if (seconds > 0) output += seconds + " s ";
+
+  return output;
+}
+
 const VotePage = () => {
   const { id } = useParams();
   const { chain } = useNetwork();
@@ -31,6 +46,8 @@ const VotePage = () => {
   const [canVote, setCanVote] = useState(false);
   const [canProcess, setCanProcess] = useState(false);
   const [proposalData, setProposalData] = useState();
+  const [required, setRequired] = useState();
+  const [progress, setProgress] = useState();
 
   const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
     address: config[chain.id]?.ccfv,
@@ -79,6 +96,7 @@ const VotePage = () => {
     functionName: "getStats",
     args: [address],
     chainId: chain.id,
+    watch: true,
   });
 
   const { data: userVoted } = useContractRead({
@@ -89,6 +107,31 @@ const VotePage = () => {
     args: [address, id],
     watch: true,
   });
+
+  const {
+    isLoading: isActivateLoading,
+    isSuccess,
+    write: writeActivate,
+  } = useContractWrite({
+    address: config[chain.id]?.ccfv,
+    abi: nodeAbi,
+    functionName: "updateProposalCursors",
+  });
+
+  const handleActivate = () => {
+    writeActivate();
+  };
+
+  const { write: writeQueue } = useContractWrite({
+    address: config[sepolia.id]?.ccfv,
+    abi: masterAbi,
+    functionName: "queueProposal",
+    args: [proposal.id],
+  });
+
+  const handleQueue = () => {
+    writeQueue();
+  };
 
   useEffect(() => {
     if (chain.name === "Sepolia") {
@@ -108,6 +151,14 @@ const VotePage = () => {
           formatEther(currentNetworkStats[1]) > 0
       );
     }
+    let _required = (parseFloat(formatEther(masterStats[0])) * 0.7).toFixed(4);
+    setRequired(_required);
+
+    let _progress = Math.floor(
+      (100 * parseFloat(formatEther(proposal[4]))) / _required
+    );
+    if (_progress > 100) _progress = 100;
+    setProgress(_progress);
   }, [userVoted, currentNetworkStats, chain, proposal]);
 
   //PROPOSAL TITLE AND DESSCRIPTION DATA FROM THEGRAPH
@@ -181,19 +232,42 @@ const VotePage = () => {
                     <div className={styles.ccipBnm}>CCIP-BnM</div>
                   </div>
                 </div>
+
+                <div className={styles.framecreator}>
+                  <b className={styles.label}>
+                    {Date.now() / 1000 < proposal[6] ? "Ends In:" : "Ended:"}
+                  </b>
+                  <b className={styles.proposalTitle}>
+                    {toHoursAndMinutes(
+                      Math.abs(proposal[6] - Date.now() / 1000)
+                    )}
+                  </b>
+                </div>
               </div>
-              <div className={styles.col2}>
+              <div className={styles.col1}>
                 {!proposal[7] && (
                   <div className={styles.framecreator}>
                     <div className={styles.balanceCcipBnm}>Required Vote</div>
-                    <b className={styles.b}>
-                      {parseFloat(formatEther(masterStats[0])) * 0.7}
-                    </b>
+                    <b className={styles.b}>{required}</b>
                   </div>
                 )}
                 <div className={styles.framecreator}>
                   <div className={styles.balanceCcipBnm}>Votes Received</div>
                   <b className={styles.b}>{formatEther(proposal[4])}</b>
+                </div>
+                <div className={styles.framecreator}>
+                  <div className={styles.progress}>
+                    <b className={styles.label}>
+                      {proposal.success ? "100" : progress}%
+                    </b>
+                    <div
+                      className={styles.progressChild}
+                      style={{
+                        width: (proposal.success ? "100" : progress) + "%",
+                      }}
+                    />
+                    <div className={styles.progressItem} />
+                  </div>
                 </div>
               </div>
               <div className={styles.col3}>
@@ -220,10 +294,24 @@ const VotePage = () => {
                   </button>
                 )}
                 {needsActivating && (
-                  <button className={styles.buttonactivate}>
+                  <button
+                    className={styles.buttonactivate}
+                    onClick={handleActivate}
+                  >
                     <b className={styles.vote}>Activate</b>
                   </button>
-                )}{" "}
+                )}
+                {chain.name == "Sepolia" &&
+                  !proposal.success &&
+                  !proposal.onQueue &&
+                  progress >= 100 && (
+                    <button
+                      className={styles.buttonqueue}
+                      onClick={handleQueue}
+                    >
+                      <b className={styles.vote}>Queue</b>
+                    </button>
+                  )}
                 {canProcess && (
                   <button
                     className={styles.buttonactivate}

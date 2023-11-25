@@ -279,3 +279,30 @@
     flex-direction: column;
   }
 }
+.progressChild,
+.progressItem {
+  position: relative;
+  box-sizing: border-box;
+  height: 0.19rem;
+}
+.progressChild {
+  border-top: 3px solid var(--color-royalblue);
+}
+.progressItem {
+  align-self: stretch;
+  border-top: 3px solid var(--color-gray-200);
+}
+.progress,
+.rowstatus {
+  display: flex;
+  flex-direction: column;
+}
+.progress {
+  align-self: stretch;
+  height: 1.38rem;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--gap-11xs);
+  text-align: left;
+  color: var(--color-silver-100);
+}
