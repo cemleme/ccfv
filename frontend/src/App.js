@@ -18,6 +18,7 @@ import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import MainDashboard from "./pages/MainDashboard";
 import VotePage from "./pages/VotePage";
 import AllFunds from "./pages/AllFunds";
+import CCIP from "./pages/CCIP";
 
 const projectId = "dc25d2849a28047aaf861d949abe72c5";
 const _chains = [sepolia, avalancheFuji, polygonMumbai, bscTestnet, baseGoerli, optimismGoerli];
@@ -95,6 +96,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainDashboard />} />
           <Route path="/funds" element={<AllFunds />} />
+          <Route path="/ccip" element={<CCIP />} />
           <Route path="/vote/:id" element={<VotePage />} />
         </Routes>
       </WagmiConfig>

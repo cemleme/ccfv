@@ -14,6 +14,21 @@ import config from "../constants/config";
 import { sepolia } from "viem/chains";
 import { useSelector } from "react-redux";
 
+function toHoursAndMinutes(totalSeconds) {
+  const totalMinutes = Math.floor(totalSeconds / 60);
+
+  const seconds = Math.floor(totalSeconds % 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  let output = "";
+  if (hours > 0) output += hours + " h ";
+  if (minutes > 0) output += minutes + " m ";
+  if (seconds > 0) output += seconds + " s ";
+
+  return output;
+}
+
 const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const navigate = useNavigate();
   const { chain } = useNetwork();
@@ -130,6 +145,18 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
             <b className={styles.label}>Amount:</b>
             <b className={styles.proposalTitle}>
               {formatEther(proposal.amount)}
+            </b>
+          </div>{" "}
+          <div className={styles.rowtop}>
+            <b className={styles.label}>
+              {Date.now() / 1000 < proposal.closeTimestamp
+                ? "Ends In:"
+                : "Ended:"}
+            </b>
+            <b className={styles.proposalTitle}>
+              {toHoursAndMinutes(
+                Math.abs(proposal.closeTimestamp - Date.now() / 1000)
+              )}
             </b>
           </div>
         </div>

@@ -13,12 +13,16 @@ const ContainerHeader = () => {
   const { open } = useWeb3Modal();
   const { address, isConnecting, isDisconnected } = useAccount();
 
-  const onButtonInspectClick = useCallback(() => {
+  const onButtonHome = useCallback(() => {
     navigate("/");
   }, [navigate]);
 
   const onButtonAllFunds = useCallback(() => {
     navigate("/funds");
+  }, [navigate]);
+
+  const onButtonCCIP = useCallback(() => {
+    navigate("/ccip");
   }, [navigate]);
 
   const {
@@ -36,15 +40,24 @@ const ContainerHeader = () => {
   return (
     <div className={styles.header}>
       <div className={styles.logoWrapper}>
-        <button className={styles.logo} onClick={onButtonInspectClick}>
+        <button className={styles.logo} onClick={onButtonHome}>
           <img className={styles.g31909Icon} alt="" src="/g31909.svg" />
           <div className={styles.logotext}>CCFV</div>
         </button>
       </div>
+      <div>
+        <button className={styles.buttonlink} onClick={onButtonHome}>
+          Home
+        </button>
+        <button className={styles.buttonlink} onClick={onButtonCCIP}>
+          CCIP Messages
+        </button>
+        <button className={styles.buttonlink} onClick={onButtonAllFunds}>
+          All Funds
+        </button>
+      </div>
       <div className={styles.empty} />
-      <button className={styles.buttonconnect} onClick={onButtonAllFunds}>
-        All Funds
-      </button>
+
       <div className={styles.userbalance}>
         <div className={styles.text}>
           <div className={styles.balanceCcipBnm}>Balance CCIP-BnM</div>

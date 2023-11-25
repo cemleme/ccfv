@@ -56,6 +56,8 @@ const AllFunds = () => {
         loadGraphData("sepolia"),
         loadGraphData("fuji"),
         loadGraphData("mumbai"),
+        loadGraphData("bsc"),
+        loadGraphData("optimism"),
       ]);
       allFundsData.forEach((v) => allFunds.push(...v));
       allFunds = allFunds.sort(

@@ -20,6 +20,8 @@
   height: 3.75rem;
 }
 .logoWrapper {
+  width: 100px;
+  margin-right:80px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -82,6 +84,18 @@
   width: 10rem;
   padding: var(--padding-3xs);
   box-sizing: border-box;
+}
+.buttonlink {
+  cursor: pointer;
+  background-color: #0a0d32;
+  color: white;
+  width: 10rem;
+  box-shadow: 0;
+  border: 0;
+  padding: var(--padding-3xs);
+}
+.buttonlink:hover {
+  background-color: #3c4184;
 }
 .buttonconnect,
 .connect,

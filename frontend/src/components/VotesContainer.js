@@ -46,6 +46,8 @@ const VotesContainer = ({ id }) => {
         loadGraphData("sepolia"),
         loadGraphData("fuji"),
         loadGraphData("mumbai"),
+        loadGraphData("bsc"),
+        loadGraphData("optimism"),
       ]);
       allVotesData.forEach((v) => allVotes.push(...v));
       allVotes = allVotes.sort(
