@@ -49,6 +49,7 @@
   box-sizing: border-box;
 }
 .buttonconnect,
+.buttonqueue,
 .connect,
 .header {
   display: flex;
@@ -156,6 +157,7 @@
   text-align: center;
 }
 .buttonactivate,
+.buttonqueue,
 .buttonvote {
   cursor: pointer;
   border: 0;
@@ -169,6 +171,12 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
+}
+.buttonqueue {
+  background-color: var(--color-gold);
+}
+.buttonqueue:hover {
+  background-color: #a9ac1e;
 }
 .voted {
   border: 0;

@@ -30,7 +30,7 @@ const ContainerHeader = () => {
     isError: balanceError,
     isLoading: balanceLoading,
   } = useContractRead({
-    address: config[chain.id]?.token,
+    address: config[chain?.id]?.token,
     abi: erc20ABI,
     functionName: "balanceOf",
     args: [address],

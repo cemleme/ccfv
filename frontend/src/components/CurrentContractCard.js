@@ -30,28 +30,28 @@ const CurrentContractCard = () => {
     setCreateProposalModalPopupOpen(false);
   }, []);
 
-  if (!chain || !stats || !stats[chain.id]) return;
+  if (!chain || !stats || !stats[chain?.id]) return;
 
   return (
     <>
       <div className={styles.currentcard}>
-        <b className={styles.title}>Current Contract: {chain.name}</b>
+        <b className={styles.title}>Current Contract: {chain?.name}</b>
         <div className={styles.frameinfo}>
           <div className={styles.col1}>
             <div className={styles.framevotepower}>
               <div className={styles.totalVotePower}>Total Vote Power</div>
-              <b className={styles.b}>{stats[chain.id].totalVotePower}</b>
+              <b className={styles.b}>{stats[chain?.id].totalVotePower}</b>
             </div>
             <div className={styles.framevotepower}>
               <div className={styles.totalVotePower}>Your Vote Power</div>
-              <b className={styles.b}>{stats[chain.id].userVotePower}</b>
+              <b className={styles.b}>{stats[chain?.id].userVotePower}</b>
             </div>
           </div>
           <div className={styles.col1}>
             <div className={styles.lifetimefunds}>
               <div className={styles.lifeTimeFunds}>Life Time Funds</div>
               <div className={styles.parent}>
-                <b className={styles.b}>{stats[chain.id].totalVotePower}</b>
+                <b className={styles.b}>{stats[chain?.id].totalVotePower}</b>
                 <div className={styles.ccipBnm}>CCIP-BnM</div>
               </div>
             </div>
@@ -59,7 +59,7 @@ const CurrentContractCard = () => {
               <div className={styles.lifetimefunds}>
                 <div className={styles.lifeTimeFunds}>Funds to Bridge</div>
                 <div className={styles.parent}>
-                  <b className={styles.b}>{stats[chain.id].fundsToBridge}</b>
+                  <b className={styles.b}>{stats[chain?.id].fundsToBridge}</b>
                   <div className={styles.ccipBnm}>CCIP-BnM</div>
                 </div>
               </div>

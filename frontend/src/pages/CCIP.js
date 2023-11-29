@@ -16,6 +16,7 @@ const CCIP = () => {
         messageId
         voteAmount
         tokenAmount
+        blockTimestamp
       }
     }`;
 
@@ -31,7 +32,6 @@ const CCIP = () => {
     });
 
     const result = await results.json();
-    console.log(result.data);
     const _bridges = result.data.messageSents;
     return _bridges.map((v) => ({ ...v, network }));
   };
@@ -46,7 +46,9 @@ const CCIP = () => {
         loadGraphData("bsc"),
         loadGraphData("optimism"),
       ]);
-      allBridgeData.forEach((v) => allBridges.push(...v));
+      allBridgeData.forEach((v) => {
+        allBridges.push(...v)
+      });
       allBridges = allBridges.sort(
         (a, b) => parseInt(b.blockTimestamp) - parseInt(a.blockTimestamp)
       );

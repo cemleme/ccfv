@@ -19,23 +19,23 @@ const NodeCard = ({ targetChain }) => {
   const dispatch = useDispatch();
 
   const { data, isError, isLoading, error } = useContractRead({
-    address: config[targetChain.id].ccfv,
+    address: config[targetChain?.id].ccfv,
     abi: nodeAbi,
     functionName: "getStats",
-    args: [address],
-    chainId: targetChain.id,
+    args: [address || "0x0000000000000000000000000000000000000000"],
+    chainId: targetChain?.id,
     watch: true,
   });
 
   useEffect(() => {
-    if (!data) return <></>;
+    if (!data) return;
 
     dispatch(
-      addFundsToBridge({ id: targetChain.id, value: formatEther(data[2]) })
+      addFundsToBridge({ id: targetChain?.id, value: formatEther(data[2]) })
     );
     dispatch(
       setStats({
-        id: targetChain.id,
+        id: targetChain?.id,
         value: {
           totalVotePower: formatEther(data[0]),
           userVotePower: formatEther(data[1]),
@@ -53,7 +53,7 @@ const NodeCard = ({ targetChain }) => {
   return (
     <div
       className={
-        chain && chain?.id === targetChain.id
+        chain && chain?.id === targetChain?.id
           ? `${styles.nodecard} ${styles.selectednode}`
           : `${styles.nodecard}`
       }
@@ -61,14 +61,14 @@ const NodeCard = ({ targetChain }) => {
       <div className={styles.frametitle}>
         <b className={styles.title}>
           Node: <br />
-          {targetChain.name.length < 20
-            ? targetChain.name
-            : targetChain.name.substring(0, 20)}
+          {targetChain?.name.length < 20
+            ? targetChain?.name
+            : targetChain?.name.substring(0, 20)}
         </b>
-        {chain && chain?.id !== targetChain.id && (
+        {chain && chain?.id !== targetChain?.id && (
           <button
             className={styles.buttonconnect}
-            onClick={() => switchNetwork?.(targetChain.id)}
+            onClick={() => switchNetwork?.(targetChain?.id)}
           >
             <b className={styles.connect}>Connect</b>
           </button>

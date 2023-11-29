@@ -23,7 +23,7 @@ const AddFundModal = ({ onClose }) => {
     isSuccess,
     write,
   } = useContractWrite({
-    address: config[chain.id]?.ccfv,
+    address: config[chain?.id]?.ccfv,
     abi: [
       {
         inputs: [
@@ -56,7 +56,7 @@ const AddFundModal = ({ onClose }) => {
     isSuccess: writeApproveIsSuccess,
     write: writeApprove,
   } = useContractWrite({
-    address: config[chain.id].token,
+    address: config[chain?.id].token,
     abi: erc20ABI,
     functionName: "approve",
   });
@@ -66,10 +66,10 @@ const AddFundModal = ({ onClose }) => {
     isError: allowanceError,
     isLoading,
   } = useContractRead({
-    address: config[chain.id].token,
+    address: config[chain?.id].token,
     abi: erc20ABI,
     functionName: "allowance",
-    args: [address, config[chain.id]?.ccfv],
+    args: [address, config[chain?.id]?.ccfv],
     watch: true,
   });
 
@@ -78,7 +78,7 @@ const AddFundModal = ({ onClose }) => {
     isError: balanceError,
     isLoading: balanceLoading,
   } = useContractRead({
-    address: config[chain.id].token,
+    address: config[chain?.id].token,
     abi: erc20ABI,
     functionName: "balanceOf",
     args: [address],
@@ -94,7 +94,7 @@ const AddFundModal = ({ onClose }) => {
 
   const handleApprove = () => {
     writeApprove({
-      args: [config[chain.id]?.ccfv, parseEther(amount.toString())],
+      args: [config[chain?.id]?.ccfv, parseEther(amount.toString())],
       from: address,
     });
   };

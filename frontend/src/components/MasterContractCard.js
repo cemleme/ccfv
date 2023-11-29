@@ -24,7 +24,7 @@ const MasterContractCard = () => {
     address: config[sepolia.id].ccfv,
     abi: masterAbi,
     functionName: "getStats",
-    args: [address],
+    args: [address || "0x0000000000000000000000000000000000000000"],
     chainId: sepolia.id,
     watch: true,
   });

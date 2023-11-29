@@ -65,8 +65,6 @@ const Proposals = () => {
     loadData();
   }, []);
 
-  console.log(proposals)
-
   if (!proposals || !stats) return <></>;
   return (
     <div className={styles.proposals}>

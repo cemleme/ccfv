@@ -41,8 +41,11 @@ const VotePage = () => {
     functionName: "proposals",
     chainId: sepolia.id,
     args: [id],
+    watch: true,
   });
+  console.log(proposal);
   const [needsActivating, setNeedsActivating] = useState(false);
+  const [activating, setActivating] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [canProcess, setCanProcess] = useState(false);
   const [proposalData, setProposalData] = useState();
@@ -50,8 +53,8 @@ const VotePage = () => {
   const [progress, setProgress] = useState();
 
   const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
-    address: config[chain.id]?.ccfv,
-    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    address: config[chain?.id]?.ccfv,
+    abi: chain?.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "voteForProposal",
     args: [id],
   });
@@ -91,19 +94,19 @@ const VotePage = () => {
     isError,
     isLoading,
   } = useContractRead({
-    address: config[chain.id]?.ccfv,
-    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    address: config[chain?.id]?.ccfv,
+    abi: chain?.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "getStats",
-    args: [address],
-    chainId: chain.id,
+    args: [address || "0x0000000000000000000000000000000000000000"],
+    chainId: chain?.id,
     watch: true,
   });
 
   const { data: userVoted } = useContractRead({
-    address: config[chain.id]?.ccfv,
-    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    address: config[chain?.id]?.ccfv,
+    abi: chain?.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "userVoted",
-    chainId: chain.id,
+    chainId: chain?.id,
     args: [address, id],
     watch: true,
   });
@@ -113,12 +116,19 @@ const VotePage = () => {
     isSuccess,
     write: writeActivate,
   } = useContractWrite({
-    address: config[chain.id]?.ccfv,
+    address: config[chain?.id]?.ccfv,
     abi: nodeAbi,
     functionName: "updateProposalCursors",
+    onSuccess(data) {
+      setActivating(false);
+    },
+    onError() {
+      setActivating(false);
+    },
   });
 
   const handleActivate = () => {
+    setActivating(true);
     writeActivate();
   };
 
@@ -126,7 +136,7 @@ const VotePage = () => {
     address: config[sepolia.id]?.ccfv,
     abi: masterAbi,
     functionName: "queueProposal",
-    args: [proposal.id],
+    args: [id],
   });
 
   const handleQueue = () => {
@@ -134,7 +144,7 @@ const VotePage = () => {
   };
 
   useEffect(() => {
-    if (chain.name === "Sepolia") {
+    if (chain?.name === "Sepolia") {
       setNeedsActivating(false);
       setCanVote(!userVoted && formatEther(currentNetworkStats[1]) > 0);
       if (proposal)
@@ -144,9 +154,9 @@ const VotePage = () => {
     } else {
       if (!currentNetworkStats) return;
       const cursorRight = currentNetworkStats[4];
-      setNeedsActivating(cursorRight <= formatEther(id));
+      setNeedsActivating(cursorRight <= parseInt(id));
       setCanVote(
-        cursorRight > formatEther(id) &&
+        cursorRight > parseInt(id) &&
           !userVoted &&
           formatEther(currentNetworkStats[1]) > 0
       );
@@ -154,9 +164,9 @@ const VotePage = () => {
     let _required = (parseFloat(formatEther(masterStats[0])) * 0.7).toFixed(4);
     setRequired(_required);
 
-    let _progress = Math.floor(
-      (100 * parseFloat(formatEther(proposal[4]))) / _required
-    );
+    let _progress = proposal
+      ? Math.floor((100 * parseFloat(formatEther(proposal[4]))) / _required)
+      : 0;
     if (_progress > 100) _progress = 100;
     setProgress(_progress);
   }, [userVoted, currentNetworkStats, chain, proposal]);
@@ -258,12 +268,12 @@ const VotePage = () => {
                 <div className={styles.framecreator}>
                   <div className={styles.progress}>
                     <b className={styles.label}>
-                      {proposal.success ? "100" : progress}%
+                      {proposal[7] ? "100" : progress}%
                     </b>
                     <div
                       className={styles.progressChild}
                       style={{
-                        width: (proposal.success ? "100" : progress) + "%",
+                        width: (proposal[7] ? "100" : progress) + "%",
                       }}
                     />
                     <div className={styles.progressItem} />
@@ -297,13 +307,16 @@ const VotePage = () => {
                   <button
                     className={styles.buttonactivate}
                     onClick={handleActivate}
+                    disabled={activating}
                   >
-                    <b className={styles.vote}>Activate</b>
+                    <b className={styles.vote}>
+                      {activating ? "Activating" : "Activate"}
+                    </b>
                   </button>
                 )}
-                {chain.name == "Sepolia" &&
-                  !proposal.success &&
-                  !proposal.onQueue &&
+                {chain?.name == "Sepolia" &&
+                  !proposal[7] &&
+                  !proposal[8] &&
                   progress >= 100 && (
                     <button
                       className={styles.buttonqueue}

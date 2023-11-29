@@ -39,10 +39,10 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const stats = useSelector((state) => state.root.stats);
 
   const { data: userVoted } = useContractRead({
-    address: config[chain.id]?.ccfv,
-    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    address: config[chain?.id]?.ccfv,
+    abi: chain?.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "userVoted",
-    chainId: chain.id,
+    chainId: chain?.id,
     args: [address, proposal.id],
     watch: true,
   });
@@ -54,11 +54,11 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
 
   useEffect(() => {
     setNeedsActivating(
-      chain.name !== "Sepolia" && cursorRight <= parseInt(proposal.id)
+      chain?.name !== "Sepolia" && cursorRight <= parseInt(proposal.id)
     );
     setCanVote(
-      stats[chain.id]?.userVotePower > 0 &&
-        (chain.name === "Sepolia" || cursorRight > parseInt(proposal.id)) &&
+      stats[chain?.id]?.userVotePower > 0 &&
+        (chain?.name === "Sepolia" || cursorRight > parseInt(proposal.id)) &&
         !userVoted &&
         Date.now() / 1000 < proposal.closeTimestamp
     );
@@ -79,7 +79,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
     isSuccess,
     write: writeActivate,
   } = useContractWrite({
-    address: config[chain.id]?.ccfv,
+    address: config[chain?.id]?.ccfv,
     abi: nodeAbi,
     functionName: "updateProposalCursors",
   });
@@ -89,8 +89,8 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   };
 
   const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
-    address: config[chain.id]?.ccfv,
-    abi: chain.name == "Sepolia" ? masterAbi : nodeAbi,
+    address: config[chain?.id]?.ccfv,
+    abi: chain?.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "voteForProposal",
     args: [proposal.id],
   });
@@ -202,7 +202,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
             <b className={styles.active}>Voted</b>
           </div>
         )}
-        {chain.name == "Sepolia" &&
+        {chain?.name == "Sepolia" &&
           !proposal.success &&
           !proposal.onQueue &&
           progress >= 100 && (
@@ -210,7 +210,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
               <b className={styles.vote}>Queue</b>
             </button>
           )}
-        {chain.name == "Sepolia" && !proposal.success && proposal.onQueue && (
+        {chain?.name == "Sepolia" && !proposal.success && proposal.onQueue && (
           <button className={styles.buttonprocess} onClick={handleProcess}>
             <b className={styles.vote}>Process</b>
           </button>
