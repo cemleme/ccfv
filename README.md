@@ -6,7 +6,36 @@ Try at https://ccfv.netlify.app
 At its core, CCFV enables project creators to launch funding campaigns on a primary blockchain while seamlessly integrating with various other blockchains.
 The platform empowers users from different networks to participate in funding and governance, making the process truly decentralized and inclusive.
 
-CCFV at the moment is running on 7 blockchains (Sepolia, Fuji, Mumbai, BNB Testnet, ...); using Chainlink CCIP, Functions, Automation and Price Feeds all at the same time.
+CCFV at the moment is running on 6 blockchains (Sepolia, Fuji, Mumbai, BNB Testnet, Base, Optimism); using Chainlink CCIP, Functions, Automation and Price Feeds.
+
+## Instructions
+
+Contracts: 
+-fill up .env file
+    PRIVATE_KEY=
+    ETHEREUM_SEPOLIA_RPC_URL="https://ethereum-sepolia.publicnode.com"
+    OPTIMISM_GOERLI_RPC_URL="https://optimism-goerli.publicnode.com"
+    BASE_GOERLI_RPC_URL="https://base-goerli.publicnode.com"
+    AVALANCHE_FUJI_RPC_URL="https://api.avax-test.network/ext/bc/C/rpc"
+    POLYGON_MUMBAI_RPC_URL="https://rpc-mumbai.maticvigil.com"
+    BSC_TESTNET_RPC_URL="https://bsc-testnet.publicnode.com"
+
+-forge build
+-forge script src/script/deploy<NETWORKNAME>.s.sol --rpc-url  --broadcast
+
+Frontend:
+-npm start / npm run build
+
+TheGraph:
+-go to thegraph/master:
+    -follow the instructions on thegraph docs
+    -adjust package.json npm run deploy script to set graph name
+    -npm run deploy to deploy
+
+-go to thegraph/nodes:
+    -follow the instructions on thegraph docs
+    -copy the desired network setting from subgraph_<networkname>.yaml into subgraph.yaml
+    -npm run deploy-<networkname> to deploy
 
 ## The Problem
 
@@ -18,7 +47,7 @@ With mass participation, the proportion of funds wasted on gas could become subs
 
 We need a solution to allow users to donate with less gas fees.
 
-Now let's imagine Frank; he prefers Avalanche for its low fees and fast transactions, but his donations are lost to a project anchored solely on Ethereum. Mark and Britney face similar issues with their favored chains, Polygon and BNB Chain, respectively.
+Now let's imagine Frank; he prefers Avalanche for its low fees and fast transactions, but his donations are lost to a project anchored solely on Ethereum. Mark and Britney face similar issues with their favored chains, Polygon and BNB Chain respectively.
 
 Imagine the miss of donations on all these different chains if we process on only 1 blockchain.
 
@@ -64,7 +93,7 @@ CCFV (CrossChain Funding and Voting) is a revolutionary platform that redefines 
 
 ## How we built it && Challenges we ran into
 
-CCFV at the moment is running on 7 blockchains (Sepolia, Fuji, Mumbai, BNB Testnet, ...); using Chainlink CCIP, Functions, Automation and Price Feeds all at the same time. The most difficuly challange was testing all these components together in multiple chains.
+CCFV at the moment is running on 6 blockchains; using Chainlink CCIP, Functions, Automation and Price Feeds all at the same time. The most difficuly challange was testing all these components together in multiple chains.
 
 ## Accomplishments that we're proud of
 
