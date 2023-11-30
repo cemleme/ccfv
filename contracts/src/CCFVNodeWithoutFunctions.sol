@@ -12,6 +12,10 @@ import {Packer} from "./Packer.sol";
 import {Strings} from "./Strings.sol";
 import {Errors} from "./Errors.sol";
 
+// THIS CONTRACT IS THE -NO CHAINLINK FUNCTIONS- VERSION OF CCFVNODE CONTRACT
+// THIS IS DEPLOYED TO THE CHAINS THAT CHAINLINK FUNCTIONS DOES NOT OPERATE
+// THE ONLY DIFFERENCE IS, THIS CONTRACT ALLOWS VOTING ON ANY PROPOSAL ID
+
 contract CCFVNodeWithoutFunctions is OwnerIsCreator, AutomationCompatible {
     using FunctionsRequest for FunctionsRequest.Request;
 
