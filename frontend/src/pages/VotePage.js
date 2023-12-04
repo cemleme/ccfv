@@ -80,6 +80,7 @@ const VotePage = () => {
     functionName: "getStats",
     args: [address],
     chainId: sepolia.id,
+    watch: true,
   });
 
   const { data: queuePeriod } = useContractRead({
@@ -87,6 +88,7 @@ const VotePage = () => {
     abi: masterAbi,
     functionName: "queuePeriod",
     chainId: sepolia.id,
+    watch: true,
   });
 
   const {
