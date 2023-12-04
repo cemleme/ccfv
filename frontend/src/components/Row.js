@@ -39,6 +39,9 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const [failed, setFailed] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
   const [isActivating, setIsActivating] = useState(false);
+  const [isQueuing, setIsQueuing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [canProcess, setCanProcess] = useState(false);
   const stats = useSelector((state) => state.root.stats);
 
   const { data: userVoted } = useContractRead({
@@ -65,6 +68,11 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
         !userVoted &&
         Date.now() / 1000 < proposal.closeTimestamp
     );
+    if (proposal)
+      setCanProcess(
+        proposal.onQueue &&
+          parseInt(Date.now() / 1000) > proposal.closeTimestamp + 86400
+      );
     setFailed(
       !proposal.success &&
         !proposal.onQueue &&
@@ -120,6 +128,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
 
   const handleQueue = () => {
     writeQueue();
+    setIsQueuing(true);
   };
 
   const { write: writeProcess } = useContractWrite({
@@ -131,6 +140,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
 
   const handleProcess = () => {
     writeProcess();
+    setIsProcessing(true);
   };
 
   return (
@@ -176,7 +186,7 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
         </div>
       </div>
       <div className={styles.rowstatus}>
-        {Date.now() / 1000 < proposal.closeTimestamp && (
+        {!proposal.success && Date.now() / 1000 < proposal.closeTimestamp && (
           <div className={styles.statusongoing}>
             <b className={styles.active}>Ongoing</b>
           </div>
@@ -220,15 +230,28 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
           !proposal.success &&
           !proposal.onQueue &&
           progress >= 100 && (
-            <button className={styles.buttonqueue} onClick={handleQueue}>
-              <b className={styles.vote}>Queue</b>
+            <button
+              className={styles.buttonqueue}
+              onClick={handleQueue}
+              disabled={isQueuing}
+            >
+              {isQueuing ? "Queuing..." : "Queue"}
             </button>
           )}
-        {chain?.name == "Sepolia" && !proposal.success && proposal.onQueue && (
-          <button className={styles.buttonprocess} onClick={handleProcess}>
-            <b className={styles.vote}>Process</b>
-          </button>
-        )}
+        {canProcess &&
+          chain?.name == "Sepolia" &&
+          proposal.success &&
+          proposal.onQueue && (
+            <button
+              className={styles.buttonprocess}
+              onClick={handleProcess}
+              disabled={isProcessing}
+            >
+              <b className={styles.vote}>
+                {isProcessing ? "Processing..." : "Process"}
+              </b>
+            </button>
+          )}
         {canVote && (
           <button
             className={styles.buttonvote}

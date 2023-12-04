@@ -46,6 +46,9 @@ const VotePage = () => {
 
   const [needsActivating, setNeedsActivating] = useState(false);
   const [activating, setActivating] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
+  const [isQueuing, setIsQueuing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [canProcess, setCanProcess] = useState(false);
   const [proposalData, setProposalData] = useState();
@@ -61,6 +64,7 @@ const VotePage = () => {
 
   const handleVote = () => {
     writeVote();
+    setIsVoting(true);
   };
 
   const { write: writeProcess } = useContractWrite({
@@ -72,6 +76,7 @@ const VotePage = () => {
 
   const handleProcess = () => {
     writeProcess();
+    setIsProcessing(true);
   };
 
   const { data: masterStats } = useContractRead({
@@ -143,6 +148,7 @@ const VotePage = () => {
 
   const handleQueue = () => {
     writeQueue();
+    setIsQueuing(true);
   };
 
   useEffect(() => {
@@ -151,7 +157,8 @@ const VotePage = () => {
       setCanVote(!userVoted && formatEther(currentNetworkStats[1]) > 0);
       if (proposal)
         setCanProcess(
-          proposal[8] && Date.now() / 1000 > proposal[6] + parseInt(queuePeriod)
+          proposal[8] &&
+            parseInt(Date.now() / 1000) > proposal[6] + parseInt(queuePeriod)
         );
     } else {
       if (!currentNetworkStats) return;
@@ -299,9 +306,13 @@ const VotePage = () => {
                   </div>
                 )}
                 {canVote && !proposal[7] && !proposal[8] && (
-                  <button className={styles.buttonvote} onClick={handleVote}>
+                  <button
+                    className={styles.buttonvote}
+                    onClick={handleVote}
+                    disabled={isVoting}
+                  >
                     <b className={styles.vote}>
-                      {isVoteLoading ? "Voting..." : "Vote For"}
+                      {isVoting ? "Voting..." : "Vote For"}
                     </b>
                   </button>
                 )}
@@ -323,23 +334,27 @@ const VotePage = () => {
                     <button
                       className={styles.buttonqueue}
                       onClick={handleQueue}
+                      disabled={isQueuing}
                     >
-                      <b className={styles.vote}>Queue</b>
+                      <b className={styles.vote}>
+                        {isQueuing ? "Queuing..." : "Queue"}
+                      </b>
                     </button>
                   )}
-                {chain?.name == "Sepolia" && proposal[8] && progress >= 100 && (
-                  <button className={styles.buttonqueue} onClick={handleQueue}>
-                    <b className={styles.vote}>Process Payment</b>
-                  </button>
-                )}
-                {canProcess && (
-                  <button
-                    className={styles.buttonactivate}
-                    onClick={handleProcess}
-                  >
-                    <b className={styles.vote}>Process Payment</b>
-                  </button>
-                )}
+                {canProcess &&
+                  chain?.name == "Sepolia" &&
+                  proposal[8] &&
+                  progress >= 100 && (
+                    <button
+                      className={styles.buttonqueue}
+                      onClick={handleProcess}
+                      disabled={isProcessing}
+                    >
+                      <b className={styles.vote}>
+                        {isProcessing ? "Processing..." : "Process Payment"}
+                      </b>
+                    </button>
+                  )}
                 {proposal[7] && (
                   <div className={styles.statussuccess}>
                     <b className={styles.active}>Success</b>
