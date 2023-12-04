@@ -9,6 +9,7 @@ import {
   useContractWrite,
 } from "wagmi";
 import masterAbi from "../constants/master.abi";
+import { waitForTransaction } from "@wagmi/core";
 import nodeAbi from "../constants/node.abi";
 import config from "../constants/config";
 import { sepolia } from "viem/chains";
@@ -36,6 +37,8 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
   const [needsActivating, setNeedsActivating] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
+  const [isActivating, setIsActivating] = useState(false);
   const stats = useSelector((state) => state.root.stats);
 
   const { data: userVoted } = useContractRead({
@@ -86,17 +89,26 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
 
   const handleActivate = () => {
     writeActivate();
+    setIsActivating(true);
   };
 
-  const { isLoading: isVoteLoading, write: writeVote } = useContractWrite({
+  const { write: writeVote } = useContractWrite({
     address: config[chain?.id]?.ccfv,
     abi: chain?.name == "Sepolia" ? masterAbi : nodeAbi,
     functionName: "voteForProposal",
     args: [proposal.id],
+    onSuccess(data) {
+      onVoteSuccess(data);
+    },
   });
 
   const handleVote = () => {
     writeVote();
+    setIsVoting(true);
+  };
+
+  const onVoteSuccess = async (data) => {
+    const receipt = await waitForTransaction({ hash: data.hash });
   };
 
   const { write: writeQueue } = useContractWrite({
@@ -131,7 +143,9 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
           </div>
           <div className={styles.rowtop}>
             <b className={styles.label}>Title:</b>
-            <b className={styles.proposalTitle}>{title}</b>
+            <b className={styles.proposalTitle}>
+              {title && title.length > 0 ? title : "|Waiting to sync|"}
+            </b>
           </div>
         </div>
         <div className={styles.rowtop}>
@@ -216,14 +230,24 @@ const Row = ({ proposal, cursorRight, title, unsynced, requiredVotePower }) => {
           </button>
         )}
         {canVote && (
-          <button className={styles.buttonvote} onClick={handleVote}>
-            <b className={styles.vote}>Vote For</b>
+          <button
+            className={styles.buttonvote}
+            onClick={handleVote}
+            disabled={isVoting}
+          >
+            <b className={styles.vote}>
+              {!isVoting ? "Vote For" : "Voting..."}
+            </b>
           </button>
         )}
         {needsActivating && (
-          <button className={styles.buttonactivate} onClick={handleActivate}>
+          <button
+            className={styles.buttonactivate}
+            onClick={handleActivate}
+            disabled={isActivating}
+          >
             <b className={styles.vote}>
-              {!isActivateLoading ? "Activate" : "Activating..."}
+              {!isActivating ? "Activate" : "Activating..."}
             </b>
           </button>
         )}

@@ -327,6 +327,11 @@ const VotePage = () => {
                       <b className={styles.vote}>Queue</b>
                     </button>
                   )}
+                {chain?.name == "Sepolia" && proposal[8] && progress >= 100 && (
+                  <button className={styles.buttonqueue} onClick={handleQueue}>
+                    <b className={styles.vote}>Process Payment</b>
+                  </button>
+                )}
                 {canProcess && (
                   <button
                     className={styles.buttonactivate}
