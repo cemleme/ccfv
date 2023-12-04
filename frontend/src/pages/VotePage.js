@@ -43,7 +43,7 @@ const VotePage = () => {
     args: [id],
     watch: true,
   });
-  console.log(proposal);
+
   const [needsActivating, setNeedsActivating] = useState(false);
   const [activating, setActivating] = useState(false);
   const [canVote, setCanVote] = useState(false);
@@ -207,7 +207,7 @@ const VotePage = () => {
     loadData();
   }, [id]);
 
-  if (!proposal || !currentNetworkStats) return <></>;
+  if (!proposal) return <></>;
 
   return (
     <div className={styles.votepage}>
@@ -296,7 +296,7 @@ const VotePage = () => {
                     <b className={styles.vote}>Voted</b>
                   </div>
                 )}
-                {canVote && (
+                {canVote && !proposal[7] && !proposal[8] && (
                   <button className={styles.buttonvote} onClick={handleVote}>
                     <b className={styles.vote}>
                       {isVoteLoading ? "Voting..." : "Vote For"}
@@ -332,6 +332,16 @@ const VotePage = () => {
                   >
                     <b className={styles.vote}>Process Payment</b>
                   </button>
+                )}
+                {proposal[7] && (
+                  <div className={styles.statussuccess}>
+                    <b className={styles.active}>Success</b>
+                  </div>
+                )}
+                {proposal[8] && (
+                  <div className={styles.statusqueued}>
+                    <b className={styles.active}>Queued</b>
+                  </div>
                 )}
               </div>
             </div>

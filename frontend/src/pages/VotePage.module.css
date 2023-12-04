@@ -314,3 +314,30 @@
   text-align: left;
   color: var(--color-silver-100);
 }
+.statussuccess {
+  background-color: var(--color-gold);
+  color: var(--color-black);
+}
+.statusqueued,
+.statussuccess,
+.statusvoted,
+.successfailed {
+  align-self: stretch;
+  border-radius: var(--br-11xl);
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+}
+.statusqueued {
+  background-color: var(--color-turquoise);
+  color: var(--color-black);
+}
+.active{
+  align-self: stretch;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  position: relative;
+  line-height: 140%;
+  align-items: center;
+}
