@@ -8,11 +8,12 @@ import {OwnerIsCreator} from "@chainlink/contracts-ccip/src/v0.8/shared/access/O
 import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
 import {IERC20} from "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-solidity/v4.8.0/token/ERC20/IERC20.sol";
+import {ReentrancyGuard} from "./ReentrancyGuard.sol";
 import {Packer} from "./Packer.sol";
 import {Errors} from "./Errors.sol";
 
 /// @title - A simple messenger contract for transferring/receiving tokens and data across chains.
-contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
+contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible, ReentrancyGuard {
     // Event emitted when a message is received from another chain.
     event MessageReceived(
         bytes32 indexed messageId, // The unique ID of the CCIP message.
@@ -236,8 +237,9 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
 
     function checkUpkeep(
         bytes calldata /* checkData */
-    ) external view override returns (bool upkeepNeeded, bytes memory) {
+    ) external view override returns (bool upkeepNeeded, bytes memory performData) {
         (upkeepNeeded, ) = getLeftCursorToUpdate();
+        performData = "";
     }
 
     function performUpkeep(bytes calldata) external override {
@@ -302,7 +304,7 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible {
         proposalCursorLeft = _proposalId + 1;
     }
 
-    function processQueuedProposal(uint256 _proposalId) external {
+    function processQueuedProposal(uint256 _proposalId) external nonReentrant {
         if (!proposals[_proposalId].onQueue) revert Errors.ProposalNotOnQueue();
         if (
             block.timestamp <
