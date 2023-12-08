@@ -13,7 +13,12 @@ import {Packer} from "./Packer.sol";
 import {Errors} from "./Errors.sol";
 
 /// @title - A simple messenger contract for transferring/receiving tokens and data across chains.
-contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible, ReentrancyGuard {
+contract CCFVMaster is
+    CCIPReceiver,
+    OwnerIsCreator,
+    AutomationCompatible,
+    ReentrancyGuard
+{
     // Event emitted when a message is received from another chain.
     event MessageReceived(
         bytes32 indexed messageId, // The unique ID of the CCIP message.
@@ -237,7 +242,12 @@ contract CCFVMaster is CCIPReceiver, OwnerIsCreator, AutomationCompatible, Reent
 
     function checkUpkeep(
         bytes calldata /* checkData */
-    ) external view override returns (bool upkeepNeeded, bytes memory performData) {
+    )
+        external
+        view
+        override
+        returns (bool upkeepNeeded, bytes memory performData)
+    {
         (upkeepNeeded, ) = getLeftCursorToUpdate();
         performData = "";
     }

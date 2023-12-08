@@ -155,11 +155,17 @@ contract CCFVNodeWithoutFunctions is OwnerIsCreator, AutomationCompatible {
 
     function checkUpkeep(
         bytes calldata /* checkData */
-    ) external view override returns (bool upkeepNeeded, bytes memory) {
+    )
+        external
+        view
+        override
+        returns (bool upkeepNeeded, bytes memory performData)
+    {
         upkeepNeeded =
             (block.timestamp >= lastBridge + bridgeInterval) &&
             (proposalIdsWithWaitingVotes.length > 0 ||
                 fundsWaiting >= minFundsToBridge);
+        performData = "";
     }
 
     function performUpkeep(bytes calldata) external override {
