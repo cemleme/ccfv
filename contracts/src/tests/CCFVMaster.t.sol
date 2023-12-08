@@ -44,15 +44,20 @@ contract CCFVMasterTest is Test {
         _;
     }
 
-    function testProvideFund() public funded {
-        assertEq(master.totalFund(), FUNDING_AMOUNT);
-    }
-
-    function testAddProposal() public funded {
+    modifier haveProposal() {
         vm.startPrank(msg.sender);
         uint256 cost = uint256(master.getProposalCost());
         master.createProposal{value: cost}(address(1), 100, "", "");
         vm.stopPrank();
+        _;
+    }
+
+    function testProvideFund() public funded {
+        assertEq(master.totalFund(), FUNDING_AMOUNT);
+    }
+
+    function testAddProposal() public funded haveProposal {
+        assertEq(master.proposalCursorRight(), 1);
     }
 
     function testGetStats() public funded {
@@ -66,12 +71,69 @@ contract CCFVMasterTest is Test {
         assertEq(userFunds, 1000);
     }
 
-    function testGetProposal() public {
-        testAddProposal();
+    function testGetProposal() public funded haveProposal {
         (CCFVMaster.Proposal memory proposal, uint256 requiredVote) = master
             .getProposal(0);
         assertEq(proposal.amount, 100);
         assertEq(proposal.target, address(1));
         assertEq(requiredVote, 700);
+    }
+
+    function testFailVoteForProposal() public funded haveProposal {
+        master.voteForProposal(0);
+    }
+
+    function testVoteForProposal() public funded haveProposal {
+        vm.prank(msg.sender);
+        master.voteForProposal(0);
+        (CCFVMaster.Proposal memory proposal, ) = master.getProposal(0);
+        assertEq(proposal.votesApproved, FUNDING_AMOUNT);
+    }
+
+    function testQueueProposal() public funded haveProposal {
+        vm.prank(msg.sender);
+        master.voteForProposal(0);
+        skip(1 days);
+        master.queueProposal(0);
+    }
+
+    function testFailProcessProposal() public funded haveProposal {
+        vm.prank(msg.sender);
+        master.voteForProposal(0);
+        skip(1 days);
+        master.queueProposal(0);
+        master.processQueuedProposal(0);
+    }
+
+    function testProcessProposal() public funded haveProposal {
+        vm.prank(msg.sender);
+        master.voteForProposal(0);
+        skip(1 days);
+        master.queueProposal(0);
+        skip(1 days);
+        master.processQueuedProposal(0);
+    }
+
+    function testAllowlistSourceChain() public {
+        vm.prank(msg.sender);
+        master.allowlistSourceChain(1, true);
+        assertEq(master.allowlistedSourceChains(1), true);
+    }
+
+    function testAllowlistSender() public {
+        vm.prank(msg.sender);
+        master.allowlistSender(address(1), true);
+        assertEq(master.allowlistedSenders(address(1)), true);
+    }
+
+    function testGetCursors() public funded haveProposal {
+        uint256 cursors = master.getCursors();
+        assertEq(cursors, 1);
+        skip(3 days);
+        master.closeFailedProposal(0);
+        cursors = master.getCursors();
+        (uint128 left, uint128 right) = Packer.unpackCursors(cursors);
+        assertEq(left, 1);
+        assertEq(right, 1);
     }
 }

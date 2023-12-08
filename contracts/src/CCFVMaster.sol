@@ -297,7 +297,7 @@ contract CCFVMaster is
     function closeFailedProposal(uint256 _proposalId) external {
         if (_proposalId < proposalCursorLeft) revert Errors.ProposalIsClosed();
 
-        if (block.timestamp > proposals[_proposalId].closeTimestamp)
+        if (block.timestamp < proposals[_proposalId].closeTimestamp)
             revert Errors.ProposalIsOngoing();
 
         if (proposals[_proposalId].success)
