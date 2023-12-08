@@ -10,6 +10,7 @@ import {IERC20} from "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-sol
 contract CCFVNodeTest is Test {
     DeployNode deployNode;
     CCFVNode node;
+    uint256 constant FUNDING_AMOUNT = 1000;
 
     function setUp() public {
         deployNode = new DeployNode();
@@ -20,20 +21,23 @@ contract CCFVNodeTest is Test {
         assertEq(node.owner(), msg.sender);
     }
 
-    function testProvideFund() public {
+    modifier funded() {
         IERC20 token = node.fundingToken();
 
         vm.startPrank(msg.sender);
 
         token.approve(address(node), 100000000);
-        node.provideFund(1000);
+        node.provideFund(FUNDING_AMOUNT);
 
         vm.stopPrank();
+        _;
     }
 
-    function testGetStats() public {
-        testProvideFund();
+    function testProvideFund() public funded {
+        assertEq(node.totalDonation(), FUNDING_AMOUNT);
+    }
 
+    function testGetStats() public funded {
         (
             uint256 lifetimeFunds,
             uint256 userFunds,
@@ -44,10 +48,10 @@ contract CCFVNodeTest is Test {
             uint256[] memory proposalsWaitingUpdate
         ) = node.getStats(msg.sender);
 
-        assertEq(lifetimeFunds, 1000);
-        assertEq(fundsToBridge, 1000);
+        assertEq(lifetimeFunds, FUNDING_AMOUNT);
+        assertEq(fundsToBridge, FUNDING_AMOUNT);
         assertEq(votesToBridge, 0);
-        assertEq(userFunds, 1000);
+        assertEq(userFunds, FUNDING_AMOUNT);
         assertEq(proposalNonce, 0);
         assertEq(canUpdateProposalNonce, false);
         assertEq(proposalsWaitingUpdate.length, 0);

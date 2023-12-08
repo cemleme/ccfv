@@ -11,6 +11,7 @@ import {IERC20} from "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-sol
 contract CCFVMasterTest is Test {
     DeployMaster deployMaster;
     CCFVMaster master;
+    uint256 constant FUNDING_AMOUNT = 1000;
 
     function setUp() public {
         deployMaster = new DeployMaster();
@@ -31,28 +32,30 @@ contract CCFVMasterTest is Test {
         master.createProposal{value: cost}(address(0), 100, "", "");
     }
 
-    function testProvideFund() public {
+    modifier funded() {
         IERC20 token = master.fundingToken();
 
         vm.startPrank(msg.sender);
 
         token.approve(address(master), 100000000);
-        master.provideFund(1000);
+        master.provideFund(FUNDING_AMOUNT);
 
         vm.stopPrank();
+        _;
     }
 
-    function testAddProposal() public {
-        testProvideFund();
+    function testProvideFund() public funded {
+        assertEq(master.totalFund(), FUNDING_AMOUNT);
+    }
 
+    function testAddProposal() public funded {
         vm.startPrank(msg.sender);
         uint256 cost = uint256(master.getProposalCost());
         master.createProposal{value: cost}(address(1), 100, "", "");
         vm.stopPrank();
     }
 
-    function testGetStats() public {
-        testProvideFund();
+    function testGetStats() public funded {
         (
             uint256 lifetimeFunds,
             uint256 currentFunds,
